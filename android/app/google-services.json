@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "806258960516",
+    "project_id": "tc-project-549fb",
+    "storage_bucket": "tc-project-549fb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:806258960516:android:ee8e9ba1c4190391c97ad1",
+        "android_client_info": {
+          "package_name": "com.tc.project"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCyWJbARJ7GaUw92WEyO1Qd8zyF4NO2ecs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
