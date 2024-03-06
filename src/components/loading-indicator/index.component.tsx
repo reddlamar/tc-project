@@ -2,7 +2,7 @@ import {View} from 'react-native';
 import React from 'react';
 import {ActivityIndicator, Text} from 'react-native-paper';
 
-import {styles} from './styles';
+import {styles} from './styles.component';
 
 const LoadingIndicator = ({color, text}: any) => {
   return (

@@ -1,6 +1,14 @@
 import React, {useState, createContext} from 'react';
+import {FirebaseAuthTypes} from '@react-native-firebase/auth';
 
-export const UserContext = createContext({
+type User = {
+  user: FirebaseAuthTypes.User | null;
+  setUser: Function;
+  initializing: boolean;
+  setInitializing: Function;
+};
+
+export const UserContext = createContext<User | null>({
   user: null,
   setUser: (newUser: any): void => newUser,
   initializing: true,
@@ -8,7 +16,7 @@ export const UserContext = createContext({
 });
 
 export const UserContextProvider = ({children}: any): any => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<FirebaseAuthTypes.User | null>(null);
   const [initializing, setInitializing] = useState<boolean>(true);
 
   return (

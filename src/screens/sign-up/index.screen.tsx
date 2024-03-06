@@ -1,119 +1,48 @@
-import {View} from 'react-native';
+import {ScrollView} from 'react-native';
 import React from 'react';
-import {Text, TextInput, Button, MD2Colors} from 'react-native-paper';
-import {useFormik} from 'formik';
-import * as Yup from 'yup';
 
-import {signUp} from '../../services/api-services/firebase/auth.service';
-import {addUser} from '../../services/api-services/firebase/firestore.service';
+import SignUpForm from '../../components/sign-up-form/index.component';
+import EmployeeSignUpForm from '../../components/employee-sign-up-form/index.component';
 
 import {styles} from './styles.screen';
+import {useForm} from '../../hooks/useForm';
+import {
+  customerInitialValues,
+  employeeInitialValues,
+} from '../../models/fomik-values.model';
+import {
+  customerSignUpSchema,
+  employeeSignUpSchema,
+} from '../../services/api-services/Yup/schemas.service';
+import CustomerSignUpForm from '../../components/customer-sign-up-form/index.component';
 
-const SignUpSchema = Yup.object().shape({
-  firstName: Yup.string()
-    .min(2, 'Too Short!')
-    .max(20, 'Too Long!')
-    .required('Required'),
-  lastName: Yup.string()
-    .min(2, 'Too Short!')
-    .max(20, 'Too Long!')
-    .required('Required'),
-  email: Yup.string().email('Invalid Email!').required('Required'),
-  password: Yup.string()
-    .min(6, 'Need at least 6 characters')
-    .required('Required'),
-});
+const SignUpScreen = ({navigation, route}: any) => {
+  const {signUpType} = route.params;
 
-const SignUpScreen = ({navigation}: any) => {
-  const formik = useFormik({
-    initialValues: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-    },
-    validationSchema: SignUpSchema,
-    onSubmit: values => console.log(values),
-  });
+  const initialValues =
+    signUpType === 'employee' ? employeeInitialValues : customerInitialValues;
 
-  const onSignUp = (
-    email: string,
-    password: string,
-    firstName: string,
-    lastName: string,
-  ) => {
-    signUp(email, password);
-    addUser(firstName, lastName, email);
+  const schema =
+    signUpType === 'employee' ? employeeSignUpSchema : customerSignUpSchema;
+
+  const form = useForm(initialValues, schema);
+
+  const renderSignUpForm = () => {
+    return (
+      <SignUpForm
+        navigation={navigation}
+        form={form}
+        title={signUpType === 'employee' ? 'Employee' : 'Customer'}>
+        {signUpType === 'employee' ? (
+          <EmployeeSignUpForm form={form} />
+        ) : (
+          <CustomerSignUpForm form={form} />
+        )}
+      </SignUpForm>
+    );
   };
 
-  return (
-    <View style={styles.container}>
-      <TextInput
-        label="First Name"
-        onChangeText={formik.handleChange('firstName')}
-        onBlur={formik.handleBlur('firstName')}
-        value={formik.values.firstName}
-        autoCapitalize="none"
-      />
-      <Text style={styles.invalidText}>
-        {formik.errors.firstName && formik.touched && formik.errors.firstName}
-      </Text>
-      <TextInput
-        label="Last Name"
-        onChangeText={formik.handleChange('lastName')}
-        onBlur={formik.handleBlur('lastName')}
-        value={formik.values.lastName}
-        autoCapitalize="none"
-      />
-      <Text style={styles.invalidText}>
-        {formik.errors.lastName && formik.touched && formik.errors.lastName}
-      </Text>
-      <TextInput
-        label="Email"
-        onChangeText={formik.handleChange('email')}
-        onBlur={formik.handleBlur('email')}
-        value={formik.values.email}
-        autoCapitalize="none"
-      />
-      <Text style={styles.invalidText}>
-        {formik.errors.email && formik.touched && formik.errors.email}
-      </Text>
-      <TextInput
-        label="Password"
-        onChangeText={formik.handleChange('password')}
-        onBlur={formik.handleBlur('password')}
-        value={formik.values.password}
-        autoCapitalize="none"
-        secureTextEntry
-      />
-      <Text style={styles.invalidText}>
-        {formik.errors.password && formik.touched && formik.errors.password}
-      </Text>
-      <View style={styles.buttonContainer}>
-        <Button
-          mode="elevated"
-          buttonColor={MD2Colors.redA700}
-          onPress={() => navigation.navigate('Sign In')}
-          textColor={MD2Colors.white}>
-          Cancel
-        </Button>
-        <Button
-          mode="elevated"
-          buttonColor={MD2Colors.greenA700}
-          onPress={() =>
-            onSignUp(
-              formik.values.email,
-              formik.values.password,
-              formik.values.firstName,
-              formik.values.lastName,
-            )
-          }
-          textColor={MD2Colors.white}>
-          Register
-        </Button>
-      </View>
-    </View>
-  );
+  return <ScrollView style={styles.container}>{renderSignUpForm()}</ScrollView>;
 };
 
 export default SignUpScreen;

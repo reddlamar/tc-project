@@ -1,16 +1,51 @@
-import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {View} from 'react-native';
+import React, {useState} from 'react';
+import {Avatar, Card, MD2Colors} from 'react-native-paper';
 
-const GroupChat = () => {
+import Messages from '../../components/messages/index.component';
+import MessageSender from '../../components/message-sender/index.component';
+import {styles} from './styles.screen';
+
+const LeftContent = (props: any) => (
+  <Avatar.Icon
+    {...props}
+    icon="chat"
+    color={MD2Colors.white}
+    style={{backgroundColor: MD2Colors.red600}}
+  />
+);
+
+const GroupChatScreen = () => {
+  const [chat, setChat] = useState([
+    {
+      sender: 'lamar@gmail.com',
+      message: 'Hi',
+      time: new Date(Date.now()).toLocaleDateString(),
+    },
+    {
+      sender: 'mike@gmail.com',
+      message: 'Hello',
+      time: new Date(Date.now()).toLocaleDateString(),
+    },
+  ]);
+
   return (
     <View style={styles.container}>
-      <Text>GroupChat</Text>
+      <Card style={styles.cardContainer}>
+        <Card.Title
+          title="Employee Chat"
+          titleStyle={{fontSize: 21, fontWeight: 'bold'}}
+          left={LeftContent}
+        />
+        <Card.Content style={styles.cardContent}>
+          <Messages chat={chat} />
+        </Card.Content>
+        <Card.Actions style={styles.cardActions}>
+          <MessageSender setChat={setChat} />
+        </Card.Actions>
+      </Card>
     </View>
   );
 };
 
-export default GroupChat;
-
-const styles = StyleSheet.create({
-  container: {flex: 1},
-});
+export default GroupChatScreen;
