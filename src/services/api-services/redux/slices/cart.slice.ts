@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit';
 import {
   decrementCartItemQuantity,
   incrementCartItemQuantity,
-} from '../../../../utils/index.util';
+} from '../../../utils/index.util';
 
 interface cartState {
   cart: any[];

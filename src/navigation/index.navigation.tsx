@@ -1,28 +1,32 @@
 import React, {useContext, useState} from 'react';
 import {View} from 'react-native';
-import {Button, MD2Colors, Text} from 'react-native-paper';
+import {Button, MD2Colors, Text, IconButton} from 'react-native-paper';
 
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 
-import RootNavigation from './root/index.naviation';
+import RootNavigation from './root/index.navigation';
 
 import {
   SignInScreen,
   SignUpScreen,
   ProductScreen,
   screenNames,
+  OrderHistoryScreen,
+  OrderDetailsScreen,
+  CheckoutScreen,
 } from '../screens/index.screens';
 
-import {useSelector} from 'react-redux';
+import {
+  useAppSelector,
+  useAppDispatch,
+} from '../services/api-services/redux/hooks';
 
 import LoadingIndicator from '../components/loading-indicator/index.component';
 
 import {UserContext} from '../features/context';
 
 import {useAuthStateChanged} from '../hooks/useAuthStateChanged';
-
-import {signOut} from '../services/api-services/firebase/auth.service';
 
 import {styles} from './styles.navigation';
 
@@ -31,21 +35,21 @@ const Stack = createNativeStackNavigator();
 const Navigation = () => {
   const {initializing} = useContext<any>(UserContext);
   const [userType, setUserType] = useState<string>('employee');
-  const userData = useSelector((state: any) => state.userReducer.user);
-  console.log('User Data:', userData);
+  const user = useAppSelector((state: any) => state.userReducer.user);
+  const dispatch = useAppDispatch();
 
   const navigation = useNavigation<any>();
-  // // const route = useRoute();
 
   useAuthStateChanged();
 
-  const renderSignOutButton = () => {
-    return (
-      <Button onPress={() => signOut()}>
-        <Text>Sign Out</Text>
-      </Button>
-    );
-  };
+  const renderSignOutButton = () => (
+    <IconButton
+      icon="logout"
+      onPress={() => dispatch({type: 'logout'})}
+      size={24}
+      iconColor={MD2Colors.red700}
+    />
+  );
 
   const renderSignUpButtons = () => {
     return (
@@ -87,22 +91,52 @@ const Navigation = () => {
   };
 
   const renderHeaderRight = () => {
-    if (userData) {
+    if (user) {
       return renderSignOutButton();
     }
-    return renderSignUpButtons();
+
+    if (!user) {
+      return renderSignUpButtons();
+    }
   };
 
   const renderStackGroup = () => {
-    if (userData) {
+    if (user?.userType === 'customer') {
       return (
-        <Stack.Group>
+        <Stack.Group
+          screenOptions={{
+            headerBackTitle: 'Back',
+            headerBackTitleStyle: {fontSize: 21},
+            headerTintColor: MD2Colors.red700,
+            headerTitleStyle: {color: MD2Colors.red700, fontSize: 21},
+          }}>
           <Stack.Screen
             name="Root"
             component={RootNavigation}
             options={{headerShown: false}}
           />
           <Stack.Screen name={screenNames.product} component={ProductScreen} />
+          <Stack.Screen
+            name={screenNames.orderHistory}
+            component={OrderHistoryScreen}
+          />
+          <Stack.Screen
+            name={screenNames.checkout}
+            component={CheckoutScreen}
+          />
+        </Stack.Group>
+      );
+    }
+
+    if (user?.userType === 'employee') {
+      return (
+        <Stack.Group screenOptions={{headerBackTitle: 'Back'}}>
+          <Stack.Screen
+            name="Root"
+            component={RootNavigation}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen name={'Order Details'} component={OrderDetailsScreen} />
         </Stack.Group>
       );
     }
@@ -120,12 +154,14 @@ const Navigation = () => {
   }
 
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerRight: () => renderHeaderRight(),
-      }}>
-      {renderStackGroup()}
-    </Stack.Navigator>
+    <>
+      <Stack.Navigator
+        screenOptions={{
+          headerRight: () => renderHeaderRight(),
+        }}>
+        {renderStackGroup()}
+      </Stack.Navigator>
+    </>
   );
 };
 

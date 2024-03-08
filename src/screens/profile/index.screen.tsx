@@ -7,10 +7,10 @@ import {getFile} from '../../services/api-services/firebase/storage.service';
 import Profile from '../../components/profile/index.component';
 
 import {styles} from './styles.screen';
-import {useSelector} from 'react-redux';
+import {useAppSelector} from '../../services/api-services/redux/hooks';
 
 const ProfileScreen = () => {
-  const user = useSelector((state: any) => state.userReducer.user);
+  const user = useAppSelector((state: any) => state.userReducer.user);
   const [profile, setProfile] = useState<any>(null);
   const [imageUri, setImageUri] = useState<any>('');
 

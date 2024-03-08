@@ -20,3 +20,12 @@ export const customerInitialValues = {
   city: '',
   state: '',
 };
+
+export const checkoutInitialValues = {
+  email: '',
+  phone: '',
+  street: '',
+  apartmentNumber: '',
+  city: '',
+  state: '',
+};

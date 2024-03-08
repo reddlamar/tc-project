@@ -1,0 +1,41 @@
+[
+  {
+    "name": "iPhone",
+    "categories": ["Popular", "Best Brands"],
+    "company": "Apple",
+    "details": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dignissim urna a risus posuere dictum. Suspendisse odio eros, sagittis eget egestas sed, condimentum quis nunc. Ut dapibus sem vitae sagittis mollis. Praesent lobortis convallis magna, nec pellentesque sapien venenatis a. In a dignissim magna. Donec ultrices aliquet lorem eget vehicula. Aliquam erat volutpat. Aliquam lacinia ullamcorper tellus, eu mattis nulla faucibus eget. Donec varius tortor commodo, posuere enim eget, feugiat enim. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "price": 99.99,
+    "quantity": 100,
+    "rating": 6,
+    "type": "phone",
+    "images": [
+      "https://media.istockphoto.com/id/1364620309/photo/iphone-13-pro.jpg?s=612x612&w=0&k=20&c=2h5Q46wh-eRyPwh4KKnJhCKFWqcd2ltgv9tdaULDdbc="
+    ]
+  },
+  {
+    "name": "Surface Pro",
+    "categories": ["Popular", "Best Brands"],
+    "company": "Microsoft",
+    "details": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dignissim urna a risus posuere dictum. Suspendisse odio eros, sagittis eget egestas sed, condimentum quis nunc. Ut dapibus sem vitae sagittis mollis. Praesent lobortis convallis magna, nec pellentesque sapien venenatis a. In a dignissim magna. Donec ultrices aliquet lorem eget vehicula. Aliquam erat volutpat. Aliquam lacinia ullamcorper tellus, eu mattis nulla faucibus eget. Donec varius tortor commodo, posuere enim eget, feugiat enim. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "price": 199.99,
+    "quantity": 100,
+    "rating": 9,
+    "type": "laptop",
+    "images": [
+      "https://support.content.office.net/en-us/media/edfbc1f5-6f46-cdd4-eb23-88dce550ee04.png"
+    ]
+  },
+  {
+    "name": "Galaxy S 21",
+    "categories": ["Popular", "Best Brands"],
+    "company": "Samsung",
+    "details": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dignissim urna a risus posuere dictum. Suspendisse odio eros, sagittis eget egestas sed, condimentum quis nunc. Ut dapibus sem vitae sagittis mollis. Praesent lobortis convallis magna, nec pellentesque sapien venenatis a. In a dignissim magna. Donec ultrices aliquet lorem eget vehicula. Aliquam erat volutpat. Aliquam lacinia ullamcorper tellus, eu mattis nulla faucibus eget. Donec varius tortor commodo, posuere enim eget, feugiat enim. Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "price": 99.99,
+    "quantity": 50,
+    "rating": 8,
+    "type": "phone",
+    "images": [
+      "https://cdn.dxomark.com/wp-content/uploads/medias/post-73433/galaxys21_ultra-2048x1536-1.jpg"
+    ]
+  }
+]

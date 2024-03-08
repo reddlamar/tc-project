@@ -3,8 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {TextInput, Button, MD2Colors, Text} from 'react-native-paper';
 
 import {useNavigation} from '@react-navigation/native';
-
-import {useDispatch} from 'react-redux';
+import {useAppDispatch} from '../../services/api-services/redux/hooks';
 
 // import {signInWithEmailPassword} from '../../services/api-services/firebase/auth.service';
 
@@ -15,7 +14,6 @@ import {styles} from './styles.component';
 import {screenNames} from '../../screens/index.screens';
 
 import {getFile} from '../../services/api-services/firebase/storage.service';
-import {login} from '../../services/api-services/redux/slices/user.slice';
 
 const SignInSchema = Yup.object().shape({
   email: Yup.string().email('Invalid Email!').required('Required'),
@@ -38,7 +36,7 @@ const SignInForm = () => {
 
   const [url, setUrl] = useState('');
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const getURL = async () => {
@@ -96,16 +94,13 @@ const SignInForm = () => {
           <Button
             buttonColor={MD2Colors.greenA700}
             onPress={() => {
-              dispatch(
-                login({
+              dispatch({
+                type: 'login',
+                payload: {
                   email: formik.values.email,
                   password: formik.values.password,
-                }),
-              );
-              // signInWithEmailPassword(
-              //   formik.values.email,
-              //   formik.values.password,
-              // );
+                },
+              });
             }}>
             <Text style={styles.buttonText}>Sign In</Text>
           </Button>

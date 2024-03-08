@@ -7,7 +7,7 @@ async function getProducts() {
   return products?.map(p => ({...p.data(), id: p.id}));
 }
 
-function* watchRequest(): Generator<any> {
+function* watchGetStoreItems(): Generator<any> {
   while (true) {
     yield take(getStoreItems);
 
@@ -22,5 +22,5 @@ function* watchRequest(): Generator<any> {
 }
 
 export default function* root() {
-  yield fork(watchRequest);
+  yield fork(watchGetStoreItems);
 }

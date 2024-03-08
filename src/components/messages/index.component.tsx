@@ -1,14 +1,14 @@
 import {Text, FlatList, View} from 'react-native';
-import React, {useContext} from 'react';
+import React /*, {useContext}*/ from 'react';
 
 import ChatBubble from 'react-native-chat-bubble';
 
-import {UserContext} from '../../features/context';
+// import {UserContext} from '../../features/context';
 import {styles} from './styles.component';
 import {MD2Colors} from 'react-native-paper';
 
 const Messages = ({chat}: any) => {
-  const {user} = useContext<any>(UserContext);
+  // const {user} = useContext<any>(UserContext);
 
   return (
     <FlatList

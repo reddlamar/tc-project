@@ -2,26 +2,26 @@ import {StyleSheet} from 'react-native';
 import {MD2Colors} from 'react-native-paper';
 
 export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+    padding: 3,
+    backgroundColor: MD2Colors.white,
+    // rowGap: 3,
+  },
   buttonContainer: {
     columnGap: 9,
     // flexDirection: 'row',
-    rowGap: 9,
-    justifyContent: 'flex-end',
-    marginHorizontal: 3,
+    rowGap: 3,
+    // justifyContent: 'flex-end',
+    // marginHorizontal: 3,
     padding: 9,
     width: '100%',
   },
   textInput: {width: '100%', backgroundColor: MD2Colors.grey300},
   buttonText: {color: MD2Colors.white, fontSize: 21, padding: 9},
   invalidText: {color: MD2Colors.red500, width: '100%', fontSize: 18},
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 12,
-    backgroundColor: MD2Colors.white,
-    rowGap: 9,
-  },
   content: {
     borderRadius: 12,
     width: '100%',
@@ -48,9 +48,9 @@ export const styles = StyleSheet.create({
   cartIcon: {width: 9, backgroundColor: MD2Colors.transparent, height: 12},
   image: {
     width: '100%',
-    height: 300,
+    height: 200,
     objectFit: 'cover',
-    marginTop: 12,
+    // marginTop: 12,
   },
   imageContainer: {
     justifyContent: 'center',

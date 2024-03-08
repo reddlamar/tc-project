@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import {View, ScrollView} from 'react-native';
 import React, {useCallback} from 'react';
 import {Avatar, Card, Text} from 'react-native-paper';
 import {styles} from './styles.screen';
@@ -8,22 +8,21 @@ const ProductScreen = ({route}: any): any => {
   const {product} = route.params;
 
   const LeftContent = useCallback(
-    (props: any) => <Avatar.Icon {...props} icon={product.type} />,
+    (props: any) => (
+      <Avatar.Icon {...props} icon={product.type} style={styles.icon} />
+    ),
     [product],
   );
 
   return (
-    <View>
+    <ScrollView>
       <Card style={styles.card}>
         <Card.Title
           title={product.name}
           subtitle={product.company}
           left={LeftContent}
         />
-        <Card.Cover
-          style={styles.cover}
-          source={{uri: 'https://picsum.photos/700'}}
-        />
+        <Card.Cover style={styles.cover} source={{uri: product.images[0]}} />
         <Card.Content style={styles.content}>
           <Text variant="titleLarge" style={[styles.text, styles.price]}>
             Price: ${product.price}
@@ -36,7 +35,7 @@ const ProductScreen = ({route}: any): any => {
               Rating: {product.rating} out of 10
             </Text>
             <Text variant="bodyLarge" style={[styles.text, styles.quantity]}>
-              {product.quantity} {product.name}'s Available
+              {product.quantity} {product.name}s Available
             </Text>
           </View>
         </Card.Content>
@@ -44,7 +43,7 @@ const ProductScreen = ({route}: any): any => {
           <AddCartButton product={product} />
         </Card.Actions>
       </Card>
-    </View>
+    </ScrollView>
   );
 };
 

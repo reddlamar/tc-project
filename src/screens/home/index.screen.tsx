@@ -1,66 +1,40 @@
-import {View, Image} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {Text, MD2Colors, Button} from 'react-native-paper';
-
-import {screenNames} from '../index.screens';
-
-// import storage from '@react-native-firebase/storage';
-
-import {
-  // listFilesAndDirectories,
-  getFile,
-} from '../../services/api-services/firebase/storage.service';
+import {View, ScrollView} from 'react-native';
+import React from 'react';
+import {Text} from 'react-native-paper';
+// import {Button} from 'react-native-paper';
 
 import {styles} from './styles.screen';
+import {useAppSelector} from '../../services/api-services/redux/hooks';
+import CategoryList from '../../components/category-list/index.component';
+// import {addProducts} from '../../services/api-services/firebase/firestore.service';
 
-const HomeScreen = ({navigation}: any) => {
-  // const reference = storage().ref('/');
-  // listFilesAndDirectories(reference);
+const HomeScreen = () => {
+  const {totalPrice} = useAppSelector((state: any) => state.cartReducer);
+  const {products} = useAppSelector((state: any) => state.productsReducer);
+  const {user} = useAppSelector((state: any) => state.userReducer);
 
-  const [url, setUrl] = useState('');
-
-  useEffect(() => {
-    const getURL = async () => {
-      const filePath: any = await getFile('/LR.png');
-      // console.log('File Path:', filePath);
-      setUrl(filePath);
-    };
-    getURL();
-  }, []);
-
-  const renderLogo = () => {
-    if (url) {
-      return (
-        <View style={styles.imageContainer}>
-          <Image
-            source={{uri: url}}
-            style={styles.image}
-            width={100}
-            height={100}
-          />
-        </View>
-      );
-    }
-  };
-
-  return (
-    <View style={styles.container}>
-      <View style={styles.contentTop}>
-        <Text variant="titleLarge" style={styles.expenseText}>
-          Your Total Expenses
-        </Text>
-        <Text style={styles.textTotal}>$600.00</Text>
-        <Button
-          style={styles.cartDetailsButton}
-          textColor={MD2Colors.white}
-          rippleColor={MD2Colors.red300}
-          icon="currency-usd">
-          Buy Products
-        </Button>
+  if (user) {
+    return (
+      <View style={styles.container}>
+        {/* <Button onPress={() => addProducts()}>Add Products</Button> */}
+        <ScrollView contentContainerStyle={styles.scrollView}>
+          <View style={styles.topContainer}>
+            <Text variant="titleMedium" style={styles.expenseText}>
+              What's Up {user.firstName}
+            </Text>
+            <Text variant="titleLarge" style={styles.expenseText}>
+              Your Total Expenses
+            </Text>
+            <Text style={styles.textTotal}>${totalPrice}</Text>
+          </View>
+          <View style={styles.bottomContainer}>
+            <CategoryList products={products} category="Popular" />
+            <CategoryList products={products} category="Best Brands" />
+          </View>
+        </ScrollView>
       </View>
-    </View>
-  );
+    );
+  }
 };
 
-//require('../../../assets/LR.png')
 export default HomeScreen;

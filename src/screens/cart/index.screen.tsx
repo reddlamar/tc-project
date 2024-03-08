@@ -1,49 +1,43 @@
 import {View} from 'react-native';
 import React from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useAppSelector} from '../../services/api-services/redux/hooks';
 import {Text, Button, MD2Colors} from 'react-native-paper';
 import {styles} from './styles.screen';
 
-import {clearCart} from '../../services/api-services/redux/slices/cart.slice';
-
 import CartItems from '../../components/cartItems/index.component';
+import Empty from '../../components/empty/index.component';
+import {screenNames} from '../index.screens';
 
-const CartScreen = () => {
-  const {cart, totalPrice} = useSelector((state: any) => state.cartReducer);
-  const dispatch = useDispatch();
+const CartScreen = ({navigation}: any) => {
+  const {cart, totalPrice} = useAppSelector((state: any) => state.cartReducer);
+  // const user = useAppSelector((state: any) => state.userReducer.user);
 
-  return (
-    <View style={styles.container}>
-      {cart.length > 0 ? (
-        <View style={{flex: 1, justifyContent: 'space-between'}}>
+  const renderComponent = () => {
+    if (cart.length > 0) {
+      return (
+        <View style={styles.container}>
+          <CartItems />
           <View style={styles.cartItemsContainer}>
-            <CartItems />
-          </View>
-          <View style={{rowGap: 9, marginBottom: 12}}>
             <Text style={styles.total} variant="titleLarge">
               Total: ${totalPrice}
             </Text>
             <Button
               style={styles.button}
-              buttonColor={MD2Colors.red600}
-              textColor={MD2Colors.white}
-              onPress={() => dispatch(clearCart())}>
-              Clear Cart
-            </Button>
-            <Button
-              style={styles.button}
               buttonColor={MD2Colors.green600}
               textColor={MD2Colors.white}
-              onPress={() => null}>
-              Buy Items
+              onPress={() => {
+                navigation.navigate(screenNames.checkout);
+              }}>
+              Checkout Items
             </Button>
           </View>
         </View>
-      ) : (
-        <Text>Cart is empty</Text>
-      )}
-    </View>
-  );
+      );
+    }
+    return <Empty text="Your cart is empty!" />;
+  };
+
+  return <View style={styles.container}>{renderComponent()}</View>;
 };
 
 export default CartScreen;

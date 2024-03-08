@@ -1,20 +1,40 @@
 import {take, put, call, fork} from 'redux-saga/effects';
-import {success, failure, login} from '../slices/user.slice';
-import {signInWithEmailPassword} from '../../firebase/auth.service';
+import {loginSuccess, logoutSuccess, failure} from '../slices/user.slice';
+import {signInWithEmailPassword, signOut} from '../../firebase/auth.service';
+import {getUser} from '../../firebase/firestore.service';
 
 async function signInUser(email: string, password: string) {
   const auth = await signInWithEmailPassword(email, password);
-  return auth?.user;
+  const extraData = await getUser(email);
+  console.log('user', extraData);
+  return {id: auth?.user.uid, ...extraData};
 }
 
-function* watchRequest(): Generator<any> {
+async function signOutUser() {
+  await signOut();
+}
+
+function* watchSignIn(): Generator<any> {
   while (true) {
-    const {payload}: any = yield take(login);
+    const {payload}: any = yield take('login');
 
     try {
       const data: any = yield call(signInUser, payload.email, payload.password);
-      console.log('Data:', data);
-      yield put(success(data));
+      yield put(loginSuccess(data));
+    } catch (ex) {
+      console.log('Ex:', ex);
+      yield put(failure(ex));
+    }
+  }
+}
+
+function* watchSignOut(): Generator<any> {
+  while (true) {
+    yield take('logout');
+
+    try {
+      yield call(signOutUser);
+      yield put(logoutSuccess());
     } catch (ex) {
       yield put(failure(ex));
     }
@@ -22,5 +42,6 @@ function* watchRequest(): Generator<any> {
 }
 
 export default function* root() {
-  yield fork(watchRequest);
+  yield fork(watchSignIn);
+  yield fork(watchSignOut);
 }

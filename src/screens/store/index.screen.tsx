@@ -1,26 +1,46 @@
 import {View, FlatList} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {Avatar, Button, Card, MD2Colors, Text} from 'react-native-paper';
-import {useDispatch, useSelector} from 'react-redux';
-
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../services/api-services/redux/hooks';
 import {screenNames} from '../index.screens';
-
 import {styles} from './styles.screen';
 import {getStoreItems} from '../../services/api-services/redux/slices/products.slice';
 import AddCartButton from '../../components/add-cart-button/index.component';
+import {companyNames} from '../../constants/company-names';
 
-const LeftContent = (props: any) => (
-  <Avatar.Icon {...props} icon="currency-usd" />
-);
+const StoreScreen = (props: any) => {
+  const dispatch = useAppDispatch();
+  const products = useAppSelector(
+    (state: any) => state.productsReducer.products,
+  );
 
-const StoreScreen = ({navigation}: any) => {
-  const dispatch = useDispatch();
-  const products = useSelector((state: any) => state.productsReducer.products);
-  console.log('Product', products[0]);
+  const {navigation} = props;
 
   useEffect(() => {
     dispatch(getStoreItems());
   }, [dispatch]);
+
+  const leftContent = useCallback((product: any) => {
+    let iconName = 'devices';
+
+    if (companyNames.indexOf(product.company.toLowerCase()) > -1) {
+      iconName = product.company.toLowerCase();
+    } else {
+      iconName = product.type;
+    }
+
+    return (
+      <Avatar.Icon
+        icon={iconName}
+        size={45}
+        style={{backgroundColor: MD2Colors.red700}}
+        color={MD2Colors.white}
+      />
+    );
+  }, []);
 
   if (products.length > 0) {
     return (
@@ -34,11 +54,11 @@ const StoreScreen = ({navigation}: any) => {
                 <Card.Title
                   title={item.name}
                   subtitle={item.company}
-                  left={LeftContent}
+                  left={() => leftContent(item)}
                 />
                 <Card.Cover
                   style={styles.cover}
-                  source={{uri: 'https://picsum.photos/700'}}
+                  source={{uri: item.images[0]}}
                 />
                 <Card.Content>
                   <Text variant="bodyLarge" style={styles.price}>
@@ -50,7 +70,7 @@ const StoreScreen = ({navigation}: any) => {
                     onPress={() =>
                       navigation.navigate(screenNames.product, {product: item})
                     }
-                    textColor={MD2Colors.blue300}
+                    textColor={MD2Colors.red700}
                     style={styles.moreDetailsButton}
                     icon="view-list">
                     More Details

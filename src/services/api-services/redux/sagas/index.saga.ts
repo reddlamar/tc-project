@@ -2,10 +2,10 @@ import {fork} from 'redux-saga/effects';
 
 import userSaga from './user.saga';
 import productsSaga from './products.saga';
-// import cartSaga from
+import orderSaga from './order.saga';
 
 export default function* rootSaga() {
   yield fork(userSaga);
   yield fork(productsSaga);
-  // yield fork()
+  yield fork(orderSaga);
 }

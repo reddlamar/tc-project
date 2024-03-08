@@ -7,6 +7,10 @@ import ProfileScreen from './profile/index.screen';
 import StoreScreen from './store/index.screen';
 import ProductScreen from './product-details/index.screen';
 import CartScreen from './cart/index.screen';
+import OrderHistoryScreen from './order-history/index.screen';
+import EmployeeHomeScreen from './employee-home/index.screen';
+import OrderDetailsScreen from './order-details/index.screen';
+import CheckoutScreen from './checkout/index.screen';
 
 export {
   HomeScreen,
@@ -18,6 +22,10 @@ export {
   StoreScreen,
   ProductScreen,
   CartScreen,
+  OrderHistoryScreen,
+  EmployeeHomeScreen,
+  OrderDetailsScreen,
+  CheckoutScreen,
 };
 
 export const screenNames = {
@@ -30,4 +38,8 @@ export const screenNames = {
   store: 'Store',
   product: 'Product',
   cart: 'Cart',
+  orderHistory: 'Order History',
+  employeeHome: 'Employee Home',
+  orderDetails: 'Order Details',
+  checkout: 'Checkout',
 };

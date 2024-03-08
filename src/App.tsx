@@ -17,6 +17,8 @@ import {PersistGate} from 'redux-persist/integration/react';
 
 import {Provider} from 'react-redux';
 
+import 'react-native-gesture-handler';
+
 import {styles} from './Styles';
 
 function App(): React.JSX.Element {

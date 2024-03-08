@@ -44,3 +44,19 @@ export const customerSignUpSchema = Yup.object().shape({
     .max(5, 'At most 5 numbers')
     .required('Required'),
 });
+
+export const checkoutSchema = Yup.object().shape({
+  email: Yup.string().email('Invalid Email!').required('Required'),
+  phone: Yup.string()
+    .min(10, 'At least 10 numbers')
+    .max(10, 'At most 10 numbers')
+    .required('Required'),
+  street: Yup.string().required('Required'),
+  ApartmentNumber: Yup.string(),
+  city: Yup.string().required('Required'),
+  state: Yup.string().required('Required'),
+  postalCode: Yup.string()
+    .min(5, 'At least 5 numbers')
+    .max(5, 'At most 5 numbers')
+    .required('Required'),
+});

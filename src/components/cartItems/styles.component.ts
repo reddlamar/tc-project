@@ -2,8 +2,8 @@ import {StyleSheet} from 'react-native';
 import {MD2Colors} from 'react-native-paper';
 
 export const styles = StyleSheet.create({
-  container: {justifyContent: 'center'},
-  card: {margin: 12},
+  container: {padding: 9},
+  card: {margin: 9},
   cover: {margin: 12},
   details: {marginBottom: 15},
   content: {
@@ -11,7 +11,6 @@ export const styles = StyleSheet.create({
     margin: 9,
     padding: 3,
     borderRadius: 9,
-    // flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     rowGap: 21,
@@ -21,8 +20,8 @@ export const styles = StyleSheet.create({
   text: {fontSize: 21, fontWeight: '500'},
   rating: {color: MD2Colors.red600},
   quantity: {fontSize: 27, paddingBottom: 6},
-  flatListContainer: {justifyContent: 'center'},
+  flatListContainer: {marginBottom: 12, height: 100},
   total: {alignSelf: 'flex-end'},
   cartItem: {flexDirection: 'row', alignItems: 'center'},
-  title: {fontSize: 30, fontWeight: 'bold', textAlign: 'center'},
+  title: {fontSize: 24, fontWeight: 'bold', textAlign: 'center'},
 });
