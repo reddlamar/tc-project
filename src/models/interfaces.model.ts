@@ -9,7 +9,8 @@ export interface orderState {
   status: string;
   deliveryDate: Date;
   estimatedTime: number;
-  deliveryBoyTrackingLocation: object;
+  deliveryClerkTrackingLocation: object;
+  deliveryClerkName: string;
 }
 
 export interface ordersState {

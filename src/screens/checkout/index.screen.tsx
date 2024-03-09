@@ -1,5 +1,5 @@
-import {View, ScrollView} from 'react-native';
-import React from 'react';
+import {View, ScrollView, Modal, Pressable} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {TextInput, Text, Button, MD2Colors} from 'react-native-paper';
 import {
   useAppDispatch,
@@ -12,12 +12,22 @@ import AddressForm from '../../components/address-form/index.componenet';
 import {clearCart} from '../../services/api-services/redux/slices/cart.slice';
 import {screenNames} from '../index.screens';
 import Empty from '../../components/empty/index.component';
+import MapView, {LatLng, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import {styles} from './styles.screen';
 
 const CheckoutScreen = ({navigation}: any) => {
   const dispatch = useAppDispatch();
   const {cart, totalPrice} = useAppSelector((state: any) => state.cartReducer);
   const {user} = useAppSelector((state: any) => state.userReducer);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [mapCoordinates, setMapCoordinates] = useState<LatLng>({
+    latitude: 33.753746,
+    longitude: -84.38633,
+  });
+
+  useEffect(() => {
+    console.log('Map Coords', mapCoordinates);
+  }, [mapCoordinates]);
 
   const form = useForm(checkoutInitialValues, checkoutSchema);
 
@@ -31,7 +41,9 @@ const CheckoutScreen = ({navigation}: any) => {
     <>
       <ScrollView>
         <Text style={styles.total} variant="titleLarge">
-          You are buying {cart.length} items
+          {cart.length > 1
+            ? `You are buying ${cart.length} items`
+            : `You are buying ${cart.length} item`}
         </Text>
         <Text style={styles.total} variant="titleLarge">
           Total Price: ${totalPrice}
@@ -48,6 +60,11 @@ const CheckoutScreen = ({navigation}: any) => {
         </Text>
         <AddressForm form={form} />
         <View style={styles.actionTotal}>
+          <Pressable
+            style={[styles.pressableButton, styles.buttonOpen, styles.button]}
+            onPress={() => setModalVisible(true)}>
+            <Text style={styles.textStyle}>Show Map</Text>
+          </Pressable>
           <Button
             style={styles.button}
             buttonColor={MD2Colors.green600}
@@ -88,6 +105,45 @@ const CheckoutScreen = ({navigation}: any) => {
           </Button>
         </View>
       </ScrollView>
+      <View style={styles.centeredView}>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(!modalVisible);
+          }}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <MapView
+                provider={PROVIDER_GOOGLE}
+                initialRegion={{
+                  latitudeDelta: 0,
+                  longitudeDelta: 0,
+                  latitude: 33.753746,
+                  longitude: -84.38633,
+                }}
+                style={{width: 300, height: 300}}>
+                <Marker
+                  draggable
+                  coordinate={mapCoordinates}
+                  onDragEnd={e =>
+                    setMapCoordinates({
+                      latitude: e.nativeEvent.coordinate.latitude,
+                      longitude: e.nativeEvent.coordinate.longitude,
+                    })
+                  }
+                />
+              </MapView>
+              <Pressable
+                style={[styles.pressableButton, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}>
+                <Text style={styles.textStyle}>Hide Modal</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+      </View>
     </>
   );
 };

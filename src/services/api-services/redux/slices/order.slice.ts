@@ -14,7 +14,8 @@ const initialState: ordersState = {
     status: '',
     deliveryDate: new Date(),
     estimatedTime: 0,
-    deliveryBoyTrackingLocation: {},
+    deliveryClerkTrackingLocation: {},
+    deliveryClerkName: '',
   },
   creatingOrders: false,
   gettingOrders: false,
@@ -38,7 +39,8 @@ export const cartSlice = createSlice({
       state.order.status = action.payload.status;
       state.order.deliveryDate = action.payload.deliveryDate;
       state.order.estimatedTime = action.payload.estimatedTime;
-      state.order.deliveryBoyTrackingLocation =
+      state.order.deliveryClerkName = '';
+      state.order.deliveryClerkTrackingLocation =
         action.payload.deliveryBoyTrackingLocation;
       state.order.totalPrice = action.payload.totalPrice;
     },

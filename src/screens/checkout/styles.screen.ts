@@ -6,6 +6,47 @@ export const styles = StyleSheet.create({
   cartItemsContainer: {justifyContent: 'space-between', rowGap: 3, margin: 12},
   total: {alignSelf: 'center'},
   button: {width: 250, alignSelf: 'center'},
-  actionTotal: {rowGap: 9, marginBottom: 12},
+  actionTotal: {rowGap: 9, marginBottom: 3},
   invalidText: {color: MD2Colors.red500},
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  pressableButton: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: MD2Colors.blue700,
+  },
+  buttonClose: {
+    backgroundColor: MD2Colors.black,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
 });
