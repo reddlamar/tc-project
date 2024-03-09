@@ -1,7 +1,9 @@
 import React from 'react';
-import {IconButton, MD2Colors} from 'react-native-paper';
+import {View} from 'react-native';
+import {Button, IconButton, MD2Colors, Badge} from 'react-native-paper';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useNavigation} from '@react-navigation/native';
 
 import {
   screenNames,
@@ -12,13 +14,16 @@ import {
   CartScreen,
   EmployeeHomeScreen,
   GroupChatScreen,
-  // CheckoutScreen,
 } from '../../screens/index.screens';
+
+import {clearCart} from '../../services/api-services/redux/slices/cart.slice';
 
 import {
   useAppDispatch,
   useAppSelector,
 } from '../../services/api-services/redux/hooks';
+import {userTypes} from '../../constants/user-types';
+import {styles} from './styles.navigation';
 
 const Tab = createBottomTabNavigator();
 
@@ -56,34 +61,77 @@ const getIconName = (routeName: string, focused: boolean) => {
   return iconName;
 };
 
-const renderHeaderRight = (dispatch: any) => (
+const renderHeaderRight = (dispatch: any, user: any) => (
   <IconButton
     icon="logout"
     onPress={() => dispatch({type: 'logout'})}
-    size={24}
-    iconColor={MD2Colors.red700}
+    size={30}
+    iconColor={
+      user.userType === 'customer' ? MD2Colors.red700 : MD2Colors.blue700
+    }
   />
 );
 
-const RootNavigation = () => {
+const renderCartHeaderLeft = (dispatch: Function, user: any) => {
+  return (
+    <Button
+      onPress={() => dispatch(clearCart())}
+      textColor={
+        user.userType === userTypes.customer
+          ? MD2Colors.red700
+          : MD2Colors.blue700
+      }>
+      Clear Cart
+    </Button>
+  );
+};
+
+const renderStoreHeaderLeft = (navigation: any, cart: any) => {
+  return (
+    <View>
+      <IconButton
+        onPress={() => navigation.navigate(screenNames.cart)}
+        icon="cart"
+        iconColor={MD2Colors.red700}
+        size={30}
+      />
+      <Badge style={styles.badge}>{cart.length}</Badge>
+    </View>
+  );
+};
+
+const TabsNavigation = () => {
+  const navigation = useNavigation<any>();
   const dispatch = useAppDispatch();
 
   const {user} = useAppSelector((state: any) => state.userReducer);
+  const {cart} = useAppSelector((state: any) => state.cartReducer);
 
   const renderTabGroup = () => {
-    if (user.userType === 'customer') {
+    if (user?.userType === 'customer') {
       return (
         <Tab.Group>
           <Tab.Screen name={screenNames.home} component={HomeScreen} />
-          <Tab.Screen name={screenNames.store} component={StoreScreen} />
+          <Tab.Screen
+            name={screenNames.store}
+            component={StoreScreen}
+            options={{
+              headerLeft: () => renderStoreHeaderLeft(navigation, cart),
+            }}
+          />
           <Tab.Screen name={screenNames.map} component={MapScreen} />
           <Tab.Screen
             name={screenNames.groupChat}
             component={GroupChatScreen}
           />
           <Tab.Screen name={screenNames.profile} component={ProfileScreen} />
-          <Tab.Screen name={screenNames.cart} component={CartScreen} />
-          {/* <Tab.Screen name={screenNames.checkout} component={CheckoutScreen} /> */}
+          <Tab.Screen
+            name={screenNames.cart}
+            component={CartScreen}
+            options={{
+              headerLeft: () => renderCartHeaderLeft(dispatch, user),
+            }}
+          />
         </Tab.Group>
       );
     }
@@ -107,7 +155,7 @@ const RootNavigation = () => {
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
         headerRight: () => {
-          return renderHeaderRight(dispatch);
+          return renderHeaderRight(dispatch, user);
         },
       })}>
       {renderTabGroup()}
@@ -115,4 +163,4 @@ const RootNavigation = () => {
   );
 };
 
-export default RootNavigation;
+export default TabsNavigation;

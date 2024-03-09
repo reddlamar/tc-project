@@ -5,6 +5,8 @@ export const styles = StyleSheet.create({
   signUpButton: {color: MD2Colors.blue900, fontWeight: 'bold'},
   logoutButton: {
     width: 'auto',
-    backgroundColor: MD2Colors.red500,
+    paddingBottom: 18,
+    position: 'relative',
+    left: 15,
   },
 });

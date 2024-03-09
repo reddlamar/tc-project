@@ -31,10 +31,10 @@ const GroupChatScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Card style={styles.cardContainer}>
+      <Card style={styles.cardContent}>
         <Card.Title
           title="Employee Chat"
-          titleStyle={{fontSize: 21, fontWeight: 'bold'}}
+          titleStyle={styles.title}
           left={LeftContent}
         />
         <Card.Content style={styles.cardContent}>

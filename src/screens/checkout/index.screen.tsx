@@ -5,7 +5,6 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '../../services/api-services/redux/hooks';
-import CartItems from '../../components/cartItems/index.component';
 import {useForm} from '../../hooks/useForm';
 import {checkoutInitialValues} from '../../models/fomik-values.model';
 import {checkoutSchema} from '../../services/api-services/Yup/schemas.service';
@@ -30,8 +29,13 @@ const CheckoutScreen = ({navigation}: any) => {
 
   return (
     <>
-      <CartItems />
       <ScrollView>
+        <Text style={styles.total} variant="titleLarge">
+          You are buying {cart.length} items
+        </Text>
+        <Text style={styles.total} variant="titleLarge">
+          Total Price: ${totalPrice}
+        </Text>
         <TextInput
           label="Email"
           onChangeText={form.handleChange('email')}
@@ -44,9 +48,6 @@ const CheckoutScreen = ({navigation}: any) => {
         </Text>
         <AddressForm form={form} />
         <View style={styles.actionTotal}>
-          <Text style={styles.total} variant="titleLarge">
-            Total: ${totalPrice}
-          </Text>
           <Button
             style={styles.button}
             buttonColor={MD2Colors.green600}

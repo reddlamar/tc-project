@@ -35,14 +35,14 @@ export const signOut = async () => {
 export const signUp = async (email: string, password: string) => {
   try {
     await auth().createUserWithEmailAndPassword(email, password);
-    // console.log('User account created & signed in!');
+    ('User account created & signed in!');
   } catch (error: any) {
     if (error.code === 'auth/email-already-in-use') {
-      // console.log('That email address is already in use!');
+      console.log('That email address is already in use!');
     }
 
     if (error.code === 'auth/invalid-email') {
-      // console.log('That email address is invalid!');
+      console.log('That email address is invalid!');
     }
 
     console.error(error);

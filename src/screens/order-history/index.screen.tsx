@@ -2,12 +2,16 @@ import {FlatList, View, ScrollView} from 'react-native';
 import React from 'react';
 import {useAppSelector} from '../../services/api-services/redux/hooks';
 import {Text} from 'react-native-paper';
-import {styles} from './styles.screen';
 import {firebase} from '@react-native-firebase/firestore';
+import Empty from '../../components/empty/index.component';
+import {styles} from './styles.screen';
 
 const OrderHistoryScreen = () => {
   const orders = useAppSelector((state: any) => state.orderReducer.orders);
-  console.log('Order', orders);
+
+  if (orders.length === 0) {
+    return <Empty text="You do not have any order history" />;
+  }
 
   return (
     <>
@@ -34,6 +38,7 @@ const OrderHistoryScreen = () => {
                   <Text>Quantity Bought: {ci.quantity}</Text>
                 </ScrollView>
               ))}
+              <Text>Status: {item.status}</Text>
               <Text>Created At: {createdAt}</Text>
               <Text style={styles.totalPriceText}>
                 Total Price: {item.totalPrice}

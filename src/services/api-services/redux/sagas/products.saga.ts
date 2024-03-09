@@ -13,7 +13,6 @@ function* watchGetStoreItems(): Generator<any> {
 
     try {
       const data: any = yield call(getProducts);
-      console.log('Data:', data);
       yield put(setStoreItems(data));
     } catch (ex) {
       yield put(failure(ex));

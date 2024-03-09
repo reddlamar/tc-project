@@ -19,7 +19,9 @@ const EmployeeHomeScreen = ({navigation}: any) => {
 
   return (
     <LinearGradient
-      colors={['#DF0404', '#8A0101', '#000000']}
+      colors={['#0260FB', '#0343AE', '#000000']}
+      start={{x: 0.6, y: 0.3}}
+      end={{x: 0.3, y: 0.6}}
       style={styles.container}>
       <View style={styles.topContainer}>
         <Text variant="titleLarge" style={[styles.text]}>

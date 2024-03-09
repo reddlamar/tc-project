@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {MD2Colors} from 'react-native-paper';
 
 export const styles = StyleSheet.create({
   listSection: {
@@ -11,6 +12,7 @@ export const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     alignSelf: 'flex-start',
+    color: MD2Colors.black,
   },
   flatList: {
     columnGap: 6,
@@ -23,6 +25,7 @@ export const styles = StyleSheet.create({
     borderRadius: 6,
     width: 90,
     alignItems: 'center',
+    backgroundColor: MD2Colors.white,
   },
   imageList: {objectFit: 'contain'},
   textList: {fontSize: 12, fontWeight: '600'},

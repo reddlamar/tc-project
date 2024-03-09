@@ -24,11 +24,11 @@ export const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: MD2Colors.red700,
   },
-  expenseText: {color: MD2Colors.white},
+  expenseText: {color: MD2Colors.black},
   textTotal: {
     fontSize: 30,
     fontWeight: 'bold',
-    color: MD2Colors.white,
+    color: MD2Colors.black,
   },
   cartDetailsButton: {
     fontSize: 18,

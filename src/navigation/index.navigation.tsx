@@ -5,7 +5,7 @@ import {Button, MD2Colors, Text, IconButton} from 'react-native-paper';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
 
-import RootNavigation from './root/index.navigation';
+import TabsNavigation from './tabs/index.navigation';
 
 import {
   SignInScreen,
@@ -46,8 +46,11 @@ const Navigation = () => {
     <IconButton
       icon="logout"
       onPress={() => dispatch({type: 'logout'})}
-      size={24}
-      iconColor={MD2Colors.red700}
+      size={30}
+      iconColor={
+        user.userType === 'customer' ? MD2Colors.red700 : MD2Colors.blue700
+      }
+      style={styles.logoutButton}
     />
   );
 
@@ -111,8 +114,8 @@ const Navigation = () => {
             headerTitleStyle: {color: MD2Colors.red700, fontSize: 21},
           }}>
           <Stack.Screen
-            name="Root"
-            component={RootNavigation}
+            name="Tabs"
+            component={TabsNavigation}
             options={{headerShown: false}}
           />
           <Stack.Screen name={screenNames.product} component={ProductScreen} />
@@ -133,7 +136,7 @@ const Navigation = () => {
         <Stack.Group screenOptions={{headerBackTitle: 'Back'}}>
           <Stack.Screen
             name="Root"
-            component={RootNavigation}
+            component={TabsNavigation}
             options={{headerShown: false}}
           />
           <Stack.Screen name={'Order Details'} component={OrderDetailsScreen} />

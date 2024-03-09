@@ -30,6 +30,7 @@ export const styles = StyleSheet.create({
     borderColor: MD2Colors.white,
     width: 200,
     marginTop: 9,
-    alignSelf: 'center',
+    alignSelf: 'flex-end',
   },
+  addressInnerContainer: {paddingLeft: 9},
 });

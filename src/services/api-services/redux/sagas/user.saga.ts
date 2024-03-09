@@ -6,7 +6,6 @@ import {getUser} from '../../firebase/firestore.service';
 async function signInUser(email: string, password: string) {
   const auth = await signInWithEmailPassword(email, password);
   const extraData = await getUser(email);
-  console.log('user', extraData);
   return {id: auth?.user.uid, ...extraData};
 }
 
@@ -22,7 +21,6 @@ function* watchSignIn(): Generator<any> {
       const data: any = yield call(signInUser, payload.email, payload.password);
       yield put(loginSuccess(data));
     } catch (ex) {
-      console.log('Ex:', ex);
       yield put(failure(ex));
     }
   }

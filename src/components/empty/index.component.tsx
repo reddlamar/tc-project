@@ -14,7 +14,7 @@ const Empty = ({text}: any) => {
       <Button
         icon="store"
         onPress={() => navigation.navigate(screenNames.store)}
-        buttonColor={MD2Colors.blue600}
+        buttonColor={MD2Colors.red700}
         textColor={MD2Colors.white}>
         Store
       </Button>

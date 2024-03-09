@@ -53,7 +53,9 @@ const StoreScreen = (props: any) => {
               <Card style={styles.card}>
                 <Card.Title
                   title={item.name}
+                  titleStyle={{color: MD2Colors.red700}}
                   subtitle={item.company}
+                  subtitleStyle={{color: MD2Colors.red700}}
                   left={() => leftContent(item)}
                 />
                 <Card.Cover

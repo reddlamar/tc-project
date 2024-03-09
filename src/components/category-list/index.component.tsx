@@ -1,13 +1,12 @@
 import {View, Text, FlatList, Image} from 'react-native';
 import React from 'react';
-import {Button, List} from 'react-native-paper';
+import {Button, List, MD2Colors} from 'react-native-paper';
 import {styles} from './styles.component';
 import {useNavigation} from '@react-navigation/native';
 import {screenNames} from '../../screens/index.screens';
 
 const CategoryList = ({products, category}: any) => {
   const navigation = useNavigation<any>();
-  console.log('Product', products);
 
   return (
     <List.Section
@@ -19,12 +18,12 @@ const CategoryList = ({products, category}: any) => {
         horizontal={true}
         contentContainerStyle={styles.flatList}
         renderItem={({item}) => {
-          console.log('Item', item);
           return (
             <Button
               onPress={() =>
                 navigation.navigate(screenNames.product, {product: item})
-              }>
+              }
+              buttonColor={MD2Colors.transparent}>
               <View style={styles.flatListView}>
                 {item?.images && (
                   <Image

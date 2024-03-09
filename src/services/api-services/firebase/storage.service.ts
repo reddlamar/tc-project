@@ -3,11 +3,6 @@ import storage from '@react-native-firebase/storage';
 
 export const listFilesAndDirectories = (reference: any, pageToken?: any) => {
   return reference.list({pageToken}).then((result: any) => {
-    // Loop over each item
-    // result.items.forEach((ref: any) => {
-    //   console.log(ref.fullPath);
-    // });
-
     if (result.nextPageToken) {
       return listFilesAndDirectories(reference, result.nextPageToken);
     }
@@ -31,10 +26,8 @@ export const saveFile = async (fileName: string) => {
 
 export const getFile = async (filePath: string) => {
   const reference = storage().ref(filePath);
-  //   console.log('Bucket:', reference.bucket);
   try {
     const d = await reference.getDownloadURL();
-    // console.log('Get File URL:', d);
     return d;
   } catch (error) {
     return console.log('error:', error);

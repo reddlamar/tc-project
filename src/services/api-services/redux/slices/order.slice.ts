@@ -27,16 +27,6 @@ export const cartSlice = createSlice({
   name: 'cartReducer',
   initialState,
   reducers: {
-    createOrder: state => {
-      state.creatingOrders = true;
-    },
-    updateOrder: state => {
-      state.updatingOrders = true;
-    },
-    getOrders: state => {
-      console.log('get order slice');
-      state.gettingOrders = true;
-    },
     createOrderSuccess: (state, action) => {
       state.creatingOrders = false;
       state.order.cart = action.payload.cart;
@@ -69,9 +59,6 @@ export const cartSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
-  createOrder,
-  updateOrder,
-  getOrders,
   createOrderSuccess,
   updateOrderStatusSuccess,
   getOrdersSuccess,

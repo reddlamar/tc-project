@@ -18,8 +18,6 @@ export const addUser = async (
       image,
       address,
     });
-
-    // console.log('User added!');
   } catch (error) {
     console.log('Add User Error:', error);
   }
@@ -59,8 +57,6 @@ export const addEmployee = async (
   employeeType: string,
 ) => {
   try {
-    // const employeeID: string = createEmployeeID(firstName, lastName);
-
     await firestore().collection('Employees').add({
       firstName,
       lastName,
@@ -70,8 +66,6 @@ export const addEmployee = async (
       image,
       employeeType,
     });
-
-    // console.log('User added!');
   } catch (error) {
     console.log('Add Employee Error:', error);
   }
@@ -90,7 +84,6 @@ export const addProducts = () => {
 export const getProductsData = async () => {
   try {
     const productData = await firestore().collection('Products').get();
-    console.log('product docs:', productData.docs);
     return productData.docs;
   } catch (error) {
     console.log('Get User Error:', error);
@@ -169,7 +162,7 @@ export const getPendingOrderCollection = async () => {
   }
 };
 
-export const updateOrderStatus = async (status: string, order: any) => {
+export const updateOrderStatus = async (order: any, status: string) => {
   try {
     await firestore()
       .collection('Orders')
