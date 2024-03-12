@@ -16,12 +16,13 @@ const ProfileScreen = () => {
 
   useEffect(() => {
     const getUserData = async (email: string): Promise<void> => {
-      if (user) {
-        const data = await getUser(email);
-        setProfile({...data});
-      }
+      const data = await getUser(email);
+      setProfile({...data});
     };
-    getUserData(user.email);
+
+    if (user) {
+      getUserData(user?.email);
+    }
   }, [user]);
 
   useEffect(() => {

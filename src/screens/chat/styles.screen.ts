@@ -2,9 +2,11 @@ import {StyleSheet} from 'react-native';
 import {MD2Colors} from 'react-native-paper';
 
 export const styles = StyleSheet.create({
-  container: {flex: 1},
+  container: {},
+
   cardContent: {
-    height: 600,
+    height: 350,
+    // flex: 1,
     borderWidth: 1,
     backgroundColor: MD2Colors.grey100,
     margin: 9,

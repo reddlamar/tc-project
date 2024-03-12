@@ -15,6 +15,7 @@ export const styles = StyleSheet.create({
     marginTop: 22,
   },
   modalView: {
+    rowGap: 6,
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
@@ -49,4 +50,5 @@ export const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: 'center',
   },
+  mapView: {width: 300, height: 300},
 });

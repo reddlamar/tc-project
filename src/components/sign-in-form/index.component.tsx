@@ -5,8 +5,6 @@ import {TextInput, Button, MD2Colors, Text} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch} from '../../services/api-services/redux/hooks';
 
-// import {signInWithEmailPassword} from '../../services/api-services/firebase/auth.service';
-
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 
@@ -20,6 +18,7 @@ const SignInSchema = Yup.object().shape({
   password: Yup.string()
     .min(6, 'Need at least 6 characters')
     .required('Required'),
+  isEmployeeSign: Yup.boolean(),
 });
 
 const SignInForm = () => {
@@ -29,6 +28,7 @@ const SignInForm = () => {
     initialValues: {
       email: 'reddlamar1@gmail.com',
       password: '123456',
+      isEmployeeSignedIn: false,
     },
     validationSchema: SignInSchema,
     onSubmit: values => console.log(values),

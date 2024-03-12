@@ -1,24 +1,22 @@
-export interface orderState {
-  cart: any[];
-  totalPrice: number;
-  customerEmail: string;
-  customerID: string;
-  createdAt: Date;
-  updatedAt: Date;
-  deliveryAddress: object;
-  status: string;
-  deliveryDate: Date;
-  estimatedTime: number;
-  deliveryClerkTrackingLocation: object;
-  deliveryClerkName: string;
-}
+import {message, order} from './types.model';
 
 export interface ordersState {
-  orders: orderState[];
-  order: orderState;
+  orders: order[];
+  pendingOrders: [];
+  inProgressOrders: [];
+  cancelledOrders: [];
+  rejectedOrders: [];
+  order: order;
   creatingOrders: boolean;
   gettingOrders: boolean;
   updatingOrders: boolean;
   failure: boolean;
+  errorMessage: string;
+}
+
+export interface chatState {
+  chat: message[];
+  success: boolean;
+  failed: boolean;
   errorMessage: string;
 }

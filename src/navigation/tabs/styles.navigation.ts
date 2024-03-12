@@ -8,4 +8,11 @@ export const styles = StyleSheet.create({
     right: 0,
     backgroundColor: MD2Colors.red700,
   },
+  signUpButton: {color: MD2Colors.blue900, fontWeight: 'bold'},
+  logoutButton: {
+    width: 'auto',
+    paddingBottom: 18,
+    position: 'relative',
+    left: 15,
+  },
 });

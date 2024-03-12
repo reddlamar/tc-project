@@ -2,29 +2,22 @@ import {take, put, call, fork} from 'redux-saga/effects';
 import {
   addOrder,
   getOrderHistoryCollection,
-  getPendingOrderCollection,
+  getOrderCollectionByStatus,
   updateOrderStatus,
+  getOrderCollection,
 } from '../../firebase/firestore.service';
 import {
-  createOrderSuccess,
+  createOrder,
   failure,
-  getOrdersSuccess,
+  getOrders,
+  getCancelledOrders,
+  getInProgressOrders,
+  getPendingOrders,
+  getRejectedOrders,
 } from '../slices/order.slice';
 
 async function addNewOrder(order: any) {
   await addOrder(order);
-}
-
-async function getOrderHistoryData(email: string) {
-  return await getOrderHistoryCollection(email);
-}
-
-async function getPendingOrders() {
-  return await getPendingOrderCollection();
-}
-
-async function updateOrderStatusData(order: any, status: string) {
-  await updateOrderStatus(order, status);
 }
 
 function* watchCreateOrder(): Generator<any> {
@@ -33,7 +26,7 @@ function* watchCreateOrder(): Generator<any> {
 
     try {
       yield call(addNewOrder, payload);
-      yield put(createOrderSuccess(payload));
+      yield put(createOrder(payload));
     } catch (ex) {
       yield put(failure(ex));
     }
@@ -45,21 +38,73 @@ function* watchGetOrderHistory(): Generator<any> {
     const {payload}: any = yield take('getOrderHistory');
 
     try {
-      const data: any = yield call(getOrderHistoryData, payload.email);
-      yield put(getOrdersSuccess(data));
+      const data: any = yield call(getOrderHistoryCollection, payload.email);
+      yield put(getOrders(data));
     } catch (ex) {
       yield put(failure(ex));
     }
   }
 }
 
-function* watchGetPendingOrder(): Generator<any> {
+function* watchGetOrders(): Generator<any> {
   while (true) {
     yield take('getOrders');
 
     try {
-      const data: any = yield call(getPendingOrders);
-      yield put(getOrdersSuccess(data));
+      const data: any = yield call(getOrderCollection);
+      yield put(getOrders(data));
+    } catch (ex) {
+      yield put(failure(ex));
+    }
+  }
+}
+
+function* watchGetPendingOrders(): Generator<any> {
+  while (true) {
+    const {payload}: any = yield take('getPendingOrders');
+
+    try {
+      const data: any = yield call(getOrderCollectionByStatus, payload.status);
+      yield put(getPendingOrders(data));
+    } catch (ex) {
+      yield put(failure(ex));
+    }
+  }
+}
+
+function* watchGetInProgressOrders(): Generator<any> {
+  while (true) {
+    const {payload}: any = yield take('getInProgressOrders');
+
+    try {
+      const data: any = yield call(getOrderCollectionByStatus, payload.status);
+      yield put(getInProgressOrders(data));
+    } catch (ex) {
+      yield put(failure(ex));
+    }
+  }
+}
+
+function* watchGetRejectedOrders(): Generator<any> {
+  while (true) {
+    const {payload}: any = yield take('getOrders');
+
+    try {
+      const data: any = yield call(getOrderCollectionByStatus, payload.status);
+      yield put(getRejectedOrders(data));
+    } catch (ex) {
+      yield put(failure(ex));
+    }
+  }
+}
+
+function* watchGetCancelledOrders(): Generator<any> {
+  while (true) {
+    const {payload}: any = yield take('getOrders');
+
+    try {
+      const data: any = yield call(getOrderCollectionByStatus, payload.status);
+      yield put(getCancelledOrders(data));
     } catch (ex) {
       yield put(failure(ex));
     }
@@ -71,8 +116,7 @@ function* watchOrderStatusUpdate(): Generator<any> {
     const {payload}: any = yield take('updateOrder');
 
     try {
-      yield call(updateOrderStatusData, payload.order, payload.status);
-      yield put(getOrdersSuccess(payload));
+      yield call(updateOrderStatus, payload.order, payload.status);
     } catch (ex) {
       yield put(failure(ex));
     }
@@ -81,7 +125,11 @@ function* watchOrderStatusUpdate(): Generator<any> {
 
 export default function* root() {
   yield fork(watchCreateOrder);
+  yield fork(watchGetOrders);
   yield fork(watchGetOrderHistory);
   yield fork(watchOrderStatusUpdate);
-  yield fork(watchGetPendingOrder);
+  yield fork(watchGetPendingOrders);
+  yield fork(watchGetInProgressOrders);
+  yield fork(watchGetCancelledOrders);
+  yield fork(watchGetRejectedOrders);
 }

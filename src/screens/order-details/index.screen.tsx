@@ -1,25 +1,85 @@
 import {View} from 'react-native';
-import {Button, MD2Colors, Text} from 'react-native-paper';
-import React from 'react';
-import {styles} from './styles.screen';
+import {Text} from 'react-native-paper';
+import React, {useState} from 'react';
+import OrderStatusButton from '../../components/order-status-button/index.component';
 import {useAppDispatch} from '../../services/api-services/redux/hooks';
-import {orderStatuses} from '../../constants/oderStatuses';
+import {orderStatuses} from '../../constants/order-statuses';
+import {firebase} from '@react-native-firebase/firestore';
+import {styles} from './styles.screen';
 
 const OrderDetailsScreen = ({route}: any) => {
   const {order} = route.params;
   const dispatch = useAppDispatch();
+  const [status, setStatus] = useState(order.status);
+
+  const createdAtOrder = new firebase.firestore.Timestamp(
+    order.createdAt.seconds,
+    order.createdAt.nanoseconds,
+  )
+    .toDate()
+    .toLocaleDateString();
+
+  const startOrder = () => {
+    setStatus(orderStatuses.inProgress);
+    dispatch({
+      type: 'updateOrder',
+      payload: {order, status: orderStatuses.inProgress},
+    });
+    dispatch({
+      type: 'sendNotification',
+      payload: {
+        email: 'reddlamar1@gmail.com',
+        text: 'Your order will be there in 30 minutes',
+        createdAt: new Date(),
+        read: false,
+      },
+    });
+  };
+
+  const rejectOrder = () => {
+    setStatus(orderStatuses.reject);
+    dispatch({
+      type: 'updateOrder',
+      payload: {order, status: orderStatuses.reject},
+    });
+    dispatch({
+      type: 'sendNotification',
+      payload: {
+        email: 'reddlamar1@gmail.com',
+        text: 'We are out of stock. We apologize for the inconvenience',
+        createdAt: new Date(),
+        read: false,
+      },
+    });
+  };
+
+  const updateOrderAsDelivered = () => {
+    setStatus(orderStatuses.delivered);
+    dispatch({
+      type: 'updateOrder',
+      payload: {order, status: orderStatuses.delivered},
+    });
+    dispatch({
+      type: 'sendNotification',
+      payload: {
+        email: 'reddlamar1@gmail.com',
+        text: 'Your order was delivered',
+        createdAt: new Date(),
+        read: false,
+      },
+    });
+  };
 
   return (
     <View style={styles.container}>
-      <Text variant="titleLarge" style={[styles.text, styles.orderTitle]}>
-        Order Status: {order.status}
-      </Text>
+      <Text style={[styles.text, styles.orderTitle]}>Order ID: {order.id}</Text>
       <View style={styles.orderContainer}>
-        <Text style={[styles.text, styles.orderText]}>
-          Order ID: {order.id}
-        </Text>
+        <Text style={[styles.text, styles.orderText]}>Status: {status}</Text>
         <Text style={[styles.text, styles.orderText]}>
           Email: {order.customerEmail}
+        </Text>
+        <Text style={[styles.text, styles.orderText]}>
+          Created At: {createdAtOrder}
         </Text>
         <View>
           <Text style={[styles.text, styles.orderText]}>Address:</Text>
@@ -38,17 +98,29 @@ const OrderDetailsScreen = ({route}: any) => {
             </Text>
           </View>
         </View>
-        <Button
-          textColor={MD2Colors.white}
-          style={styles.buttonStart}
-          onPress={() =>
-            dispatch({
-              type: 'updateOrder',
-              payload: {order, status: orderStatuses.inProgress},
-            })
-          }>
-          Start Delivery Process
-        </Button>
+        <View style={styles.buttonContainer}>
+          {status === orderStatuses.pending && (
+            <OrderStatusButton
+              order={order}
+              onPress={startOrder}
+              text="Start Delivery Process"
+            />
+          )}
+          {status === orderStatuses.pending && (
+            <OrderStatusButton
+              order={order}
+              onPress={rejectOrder}
+              text="Reject Order"
+            />
+          )}
+          {status === orderStatuses.inProgress && (
+            <OrderStatusButton
+              order={order}
+              onPress={() => updateOrderAsDelivered()}
+              text="Update Order as Delivered"
+            />
+          )}
+        </View>
       </View>
     </View>
   );

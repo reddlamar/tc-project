@@ -2,7 +2,7 @@ import HomeScreen from './home/index.screen';
 import MapScreen from './map/index.screen';
 import SignInScreen from './sign-in/index.screen';
 import SignUpScreen from './sign-up/index.screen';
-import GroupChatScreen from './group-chat/index.screen';
+import ChatScreen from './chat/index.screen';
 import ProfileScreen from './profile/index.screen';
 import StoreScreen from './store/index.screen';
 import ProductScreen from './product-details/index.screen';
@@ -11,13 +11,16 @@ import OrderHistoryScreen from './order-history/index.screen';
 import EmployeeHomeScreen from './employee-home/index.screen';
 import OrderDetailsScreen from './order-details/index.screen';
 import CheckoutScreen from './checkout/index.screen';
+import NotificationsScreen from './notifications/index.screen';
+import DeliveriesScreen from './deliveries/index.screen';
+import EmployeeChatScreen from './employee-chat/index.screen';
 
 export {
   HomeScreen,
   MapScreen,
   SignInScreen,
   SignUpScreen,
-  GroupChatScreen,
+  ChatScreen,
   ProfileScreen,
   StoreScreen,
   ProductScreen,
@@ -26,6 +29,9 @@ export {
   EmployeeHomeScreen,
   OrderDetailsScreen,
   CheckoutScreen,
+  NotificationsScreen,
+  DeliveriesScreen,
+  EmployeeChatScreen,
 };
 
 export const screenNames = {
@@ -33,7 +39,7 @@ export const screenNames = {
   map: 'Map',
   signIn: 'Sign In',
   signUp: 'Sign Up',
-  groupChat: 'Group Chat',
+  chat: 'Chat',
   profile: 'Profile',
   store: 'Store',
   product: 'Product',
@@ -42,4 +48,7 @@ export const screenNames = {
   employeeHome: 'Employee Home',
   orderDetails: 'Order Details',
   checkout: 'Checkout',
+  notifications: 'Notifications',
+  deliveries: 'Deliveries',
+  employeeChat: 'Employee Chat',
 };

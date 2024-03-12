@@ -55,5 +55,13 @@ export const styles = StyleSheet.create({
   imageContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 3,
+    borderColor: MD2Colors.red700,
+  },
+  employeeCheckbox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: '100%',
   },
 });

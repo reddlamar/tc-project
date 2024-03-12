@@ -7,7 +7,6 @@ import {
 } from '../../services/api-services/redux/hooks';
 import {screenNames} from '../index.screens';
 import {styles} from './styles.screen';
-import {getStoreItems} from '../../services/api-services/redux/slices/products.slice';
 import AddCartButton from '../../components/add-cart-button/index.component';
 import {companyNames} from '../../constants/company-names';
 
@@ -20,7 +19,7 @@ const StoreScreen = (props: any) => {
   const {navigation} = props;
 
   useEffect(() => {
-    dispatch(getStoreItems());
+    dispatch({type: 'getProduct'});
   }, [dispatch]);
 
   const leftContent = useCallback((product: any) => {

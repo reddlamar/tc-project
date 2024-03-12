@@ -5,19 +5,21 @@ import {useNavigation} from '@react-navigation/native';
 import {styles} from './styles.component';
 import {screenNames} from '../../screens/index.screens';
 
-const Empty = ({text}: any) => {
+const Empty = ({text, showButton = true}: any) => {
   const navigation = useNavigation<any>();
 
   return (
     <View style={styles.container}>
       <Text variant="titleLarge">{text}</Text>
-      <Button
-        icon="store"
-        onPress={() => navigation.navigate(screenNames.store)}
-        buttonColor={MD2Colors.red700}
-        textColor={MD2Colors.white}>
-        Store
-      </Button>
+      {showButton && (
+        <Button
+          icon="store"
+          onPress={() => navigation.navigate(screenNames.store)}
+          buttonColor={MD2Colors.red700}
+          textColor={MD2Colors.white}>
+          Store
+        </Button>
+      )}
     </View>
   );
 };

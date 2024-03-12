@@ -1,9 +1,7 @@
 import {ScrollView} from 'react-native';
 import React from 'react';
-
 import SignUpForm from '../../components/sign-up-form/index.component';
 import EmployeeSignUpForm from '../../components/employee-sign-up-form/index.component';
-
 import {styles} from './styles.screen';
 import {useForm} from '../../hooks/useForm';
 import {
@@ -13,7 +11,7 @@ import {
 import {
   customerSignUpSchema,
   employeeSignUpSchema,
-} from '../../services/api-services/Yup/schemas.service';
+} from '../../services/api-services/yup/schemas.service';
 import CustomerSignUpForm from '../../components/customer-sign-up-form/index.component';
 
 const SignUpScreen = ({navigation, route}: any) => {

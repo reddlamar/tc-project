@@ -1,19 +1,15 @@
 import {take, put, call, fork} from 'redux-saga/effects';
-import {getProductsData} from '../../firebase/firestore.service';
-import {getStoreItems, setStoreItems, failure} from '../slices/products.slice';
-
-async function getProducts() {
-  const products = await getProductsData();
-  return products?.map(p => ({...p.data(), id: p.id}));
-}
+import {getProductCollection} from '../../firebase/firestore.service';
+import {failure, getProducts, success} from '../slices/products.slice';
 
 function* watchGetStoreItems(): Generator<any> {
   while (true) {
-    yield take(getStoreItems);
+    yield take('getProducts');
 
     try {
-      const data: any = yield call(getProducts);
-      yield put(setStoreItems(data));
+      const data: any = yield call(getProductCollection);
+      yield put(getProducts(data));
+      yield put(success());
     } catch (ex) {
       yield put(failure(ex));
     }

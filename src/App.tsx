@@ -30,11 +30,7 @@ function App(): React.JSX.Element {
 
   return (
     <Provider store={store}>
-      <PersistGate
-        persistor={persistor}
-        onBeforeLift={() => {
-          console.log('store is loaded');
-        }}>
+      <PersistGate persistor={persistor}>
         <PaperProvider>
           <NavigationContainer>
             <UserContextProvider>

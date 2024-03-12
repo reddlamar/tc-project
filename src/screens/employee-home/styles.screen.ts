@@ -44,9 +44,10 @@ export const styles = StyleSheet.create({
   orderContainer: {
     borderWidth: 1,
     padding: 6,
-    borderRadius: 3,
+    borderRadius: 6,
     borderColor: MD2Colors.white,
     backgroundColor: MD2Colors.grey900,
+    width: 300,
   },
   orderText: {fontSize: 15, fontWeight: '600'},
   cartDetailsButton: {

@@ -3,6 +3,10 @@ import {ordersState} from '../../../../models/interfaces.model';
 
 const initialState: ordersState = {
   orders: [],
+  pendingOrders: [],
+  inProgressOrders: [],
+  cancelledOrders: [],
+  rejectedOrders: [],
   order: {
     cart: [],
     totalPrice: 0,
@@ -28,7 +32,7 @@ export const cartSlice = createSlice({
   name: 'cartReducer',
   initialState,
   reducers: {
-    createOrderSuccess: (state, action) => {
+    createOrder: (state, action) => {
       state.creatingOrders = false;
       state.order.cart = action.payload.cart;
       state.order.customerEmail = action.payload.email;
@@ -44,10 +48,22 @@ export const cartSlice = createSlice({
         action.payload.deliveryBoyTrackingLocation;
       state.order.totalPrice = action.payload.totalPrice;
     },
-    getOrdersSuccess: (state, action) => {
+    getOrders: (state, action) => {
       state.orders = action.payload;
     },
-    updateOrderStatusSuccess: (state, action) => {
+    getPendingOrders: (state, action) => {
+      state.pendingOrders = action.payload;
+    },
+    getInProgressOrders: (state, action) => {
+      state.inProgressOrders = action.payload;
+    },
+    getCancelledOrders: (state, action) => {
+      state.cancelledOrders = action.payload;
+    },
+    getRejectedOrders: (state, action) => {
+      state.rejectedOrders = action.payload;
+    },
+    updateOrderStatus: (state, action) => {
       state.updatingOrders = false;
       state.order.status = action.payload.status;
       state.order.updatedAt = action.payload.updatedAt;
@@ -61,9 +77,13 @@ export const cartSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
-  createOrderSuccess,
-  updateOrderStatusSuccess,
-  getOrdersSuccess,
+  createOrder,
+  updateOrderStatus,
+  getOrders,
+  getPendingOrders,
+  getInProgressOrders,
+  getCancelledOrders,
+  getRejectedOrders,
   failure,
 } = cartSlice.actions;
 

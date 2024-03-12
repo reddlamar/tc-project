@@ -1,5 +1,5 @@
-import {View, ScrollView, Modal, Pressable} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {View, ScrollView} from 'react-native';
+import React, {useState} from 'react';
 import {TextInput, Text, Button, MD2Colors} from 'react-native-paper';
 import {
   useAppDispatch,
@@ -7,31 +7,27 @@ import {
 } from '../../services/api-services/redux/hooks';
 import {useForm} from '../../hooks/useForm';
 import {checkoutInitialValues} from '../../models/fomik-values.model';
-import {checkoutSchema} from '../../services/api-services/Yup/schemas.service';
-import AddressForm from '../../components/address-form/index.componenet';
+import {checkoutSchema} from '../../services/api-services/yup/schemas.service';
+import AddressForm from '../../components/address-form/index.component';
 import {clearCart} from '../../services/api-services/redux/slices/cart.slice';
 import {screenNames} from '../index.screens';
 import Empty from '../../components/empty/index.component';
-import MapView, {LatLng, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import {LatLng} from 'react-native-maps';
+import geocoder from '@timwangdev/react-native-geocoder';
 import {styles} from './styles.screen';
+import {orderStatuses} from '../../constants/order-statuses';
 
 const CheckoutScreen = ({navigation}: any) => {
   const dispatch = useAppDispatch();
   const {cart, totalPrice} = useAppSelector((state: any) => state.cartReducer);
   const {user} = useAppSelector((state: any) => state.userReducer);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [isAddressSubmitted, setIsAddressSubmitted] = useState(false);
   const [mapCoordinates, setMapCoordinates] = useState<LatLng>({
     latitude: 33.753746,
     longitude: -84.38633,
   });
 
-  useEffect(() => {
-    console.log('Map Coords', mapCoordinates);
-  }, [mapCoordinates]);
-
   const form = useForm(checkoutInitialValues, checkoutSchema);
-
-  form.values.email = user.email;
 
   if (cart.length === 0) {
     return <Empty text="Cart is empty!" />;
@@ -60,15 +56,27 @@ const CheckoutScreen = ({navigation}: any) => {
         </Text>
         <AddressForm form={form} />
         <View style={styles.actionTotal}>
-          <Pressable
-            style={[styles.pressableButton, styles.buttonOpen, styles.button]}
-            onPress={() => setModalVisible(true)}>
-            <Text style={styles.textStyle}>Show Map</Text>
-          </Pressable>
+          <Button
+            onPress={() => {
+              setIsAddressSubmitted(true);
+              geocoder
+                .geocodeAddress(
+                  `${form.values.street} ${form.values.city} ${form.values.state}`,
+                )
+                .then(geoAddresses => {
+                  setMapCoordinates({
+                    latitude: geoAddresses[0].position.lat,
+                    longitude: geoAddresses[0].position.lng,
+                  });
+                });
+            }}>
+            Submit Address
+          </Button>
           <Button
             style={styles.button}
             buttonColor={MD2Colors.green600}
             textColor={MD2Colors.white}
+            disabled={!isAddressSubmitted}
             onPress={() => {
               dispatch({
                 type: 'createOrder',
@@ -84,10 +92,10 @@ const CheckoutScreen = ({navigation}: any) => {
                     city: form.values.city,
                     state: form.values.state,
                     postalCode: form.values.postalCode,
-                    latitude: -84.386205,
-                    longitude: 33.7683818,
+                    latitude: mapCoordinates.latitude,
+                    longitude: mapCoordinates.longitude,
                   },
-                  status: 'pending',
+                  status: orderStatuses.pending,
                   deliveryDate: new Date(),
                   estimatedTime: Date.now() + 1800000,
                   deliveryBoyTrackingLocation: {
@@ -105,45 +113,6 @@ const CheckoutScreen = ({navigation}: any) => {
           </Button>
         </View>
       </ScrollView>
-      <View style={styles.centeredView}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <MapView
-                provider={PROVIDER_GOOGLE}
-                initialRegion={{
-                  latitudeDelta: 0,
-                  longitudeDelta: 0,
-                  latitude: 33.753746,
-                  longitude: -84.38633,
-                }}
-                style={{width: 300, height: 300}}>
-                <Marker
-                  draggable
-                  coordinate={mapCoordinates}
-                  onDragEnd={e =>
-                    setMapCoordinates({
-                      latitude: e.nativeEvent.coordinate.latitude,
-                      longitude: e.nativeEvent.coordinate.longitude,
-                    })
-                  }
-                />
-              </MapView>
-              <Pressable
-                style={[styles.pressableButton, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}>
-                <Text style={styles.textStyle}>Hide Modal</Text>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
-      </View>
     </>
   );
 };

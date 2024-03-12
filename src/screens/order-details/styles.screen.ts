@@ -10,7 +10,12 @@ export const styles = StyleSheet.create({
     padding: 9,
   },
   text: {color: MD2Colors.white, padding: 6},
-  orderTitle: {fontSize: 21, fontWeight: 'bold', color: MD2Colors.blue700},
+  orderTitle: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: MD2Colors.blue700,
+    textAlign: 'center',
+  },
   orderContainer: {
     borderWidth: 1,
     padding: 6,
@@ -25,12 +30,8 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     columnGap: 6,
   },
-  buttonStart: {
-    borderWidth: 1,
-    borderColor: MD2Colors.white,
-    width: 200,
-    marginTop: 9,
-    alignSelf: 'flex-end',
-  },
   addressInnerContainer: {paddingLeft: 9},
+  buttonContainer: {
+    alignItems: 'center',
+  },
 });

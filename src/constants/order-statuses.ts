@@ -3,4 +3,5 @@ export const orderStatuses = {
   cancel: 'Cancel',
   delivered: 'Delivered',
   inProgress: 'In Progress',
+  reject: 'Reject',
 };

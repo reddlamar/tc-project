@@ -1,5 +1,6 @@
-import firestore from '@react-native-firebase/firestore';
+import firestore, {firebase} from '@react-native-firebase/firestore';
 import products from '../../../data/products.json';
+import {message} from '../../../models/types.model';
 
 export const addUser = async (
   firstName: string,
@@ -20,6 +21,68 @@ export const addUser = async (
     });
   } catch (error) {
     console.log('Add User Error:', error);
+  }
+};
+
+export const sendCustomerNotification = async (
+  customerEmail: any,
+  text: string,
+  createdAt: Date,
+  read: boolean,
+) => {
+  try {
+    await firestore()
+      .collection(`${customerEmail}-Notifications`)
+      .add({text, createdAt, read});
+  } catch (error) {
+    console.log('Send Notification Error:', error);
+  }
+};
+
+export const getCustomerNotifications = async (customerEmail: string) => {
+  try {
+    return (
+      await firestore()
+        .collection(`${customerEmail}-Notifications`)
+        .orderBy('createdAt', 'desc')
+        .get()
+    ).docs.map(n => ({
+      id: n.id,
+      ...n.data(),
+    }));
+  } catch (error) {
+    console.log('Get Notification Error:', error);
+  }
+};
+
+export const getCustomerUnreadNotifications = async (customerEmail: string) => {
+  try {
+    return (
+      await firestore()
+        .collection(`${customerEmail}-Notifications`)
+        .where('read', '==', false)
+        .get()
+    ).docs.map(n => ({
+      id: n.id,
+      ...n.data(),
+    }));
+  } catch (error) {
+    console.log('Get Unread Notification Error:', error);
+  }
+};
+
+export const updateNotificationReadStatus = async (
+  customerEmail: string,
+  read: string,
+  notification: any,
+) => {
+  try {
+    await firestore()
+      .collection(`${customerEmail}-Notifications`)
+      .doc(notification.id)
+      .set({...notification, ['read']: read});
+  } catch (error) {
+    console.log('Get User Error:', error);
   }
 };
 
@@ -81,7 +144,7 @@ export const addProducts = () => {
   });
 };
 
-export const getProductsData = async () => {
+export const getProductCollection = async () => {
   try {
     const productData = await firestore().collection('Products').get();
     return productData.docs;
@@ -96,6 +159,7 @@ export const getProductsDataByCategory = async (category: string) => {
       .collection('Products')
       .where('categories', 'array-contains', category)
       .get();
+
     return productData.docs.map(p => {
       const data = p.data();
       return {id: p.id, ...data};
@@ -138,6 +202,7 @@ export const getOrderHistoryCollection = async (email: string) => {
       .collection('Orders')
       .where('customerEmail', '==', email)
       .get();
+
     return orders.docs.map(o => {
       const data = o.data();
       return {id: o.id, ...data};
@@ -147,12 +212,29 @@ export const getOrderHistoryCollection = async (email: string) => {
   }
 };
 
-export const getPendingOrderCollection = async () => {
+export const getOrderCollection = async () => {
   try {
     const orders = await firestore()
       .collection('Orders')
-      .where('status', '==', 'pending')
+      .orderBy('createdAt', 'asc')
       .get();
+    return orders.docs.map(o => {
+      const data = o.data();
+      return {id: o.id, ...data};
+    });
+  } catch (error) {
+    console.log('Get User Error:', error);
+  }
+};
+
+export const getOrderCollectionByStatus = async (status: string) => {
+  try {
+    const orders = await firestore()
+      .collection('Orders')
+      .orderBy('createdAt', 'desc')
+      .where('status', '==', status)
+      .get();
+
     return orders.docs.map(o => {
       const data = o.data();
       return {id: o.id, ...data};
@@ -170,5 +252,42 @@ export const updateOrderStatus = async (order: any, status: string) => {
       .set({...order, ['status']: status, ['updatedAt']: new Date()});
   } catch (error) {
     console.log('Get User Error:', error);
+  }
+};
+
+export const sendMessage = async (
+  newChat: any,
+  customerEmail: string,
+  chat: message[],
+) => {
+  try {
+    await firestore()
+      .collection('Chat')
+      .doc(`${customerEmail}`)
+      .set({
+        messages: [
+          {
+            message: newChat.message,
+            sender: newChat.sender,
+            createdAt: new Date(),
+          },
+          ...chat,
+        ],
+      });
+  } catch (error) {
+    console.log('Send Message Error', error);
+  }
+};
+
+export const getMessageCollection = async (email: string) => {
+  try {
+    return (
+      await firestore()
+        .collection('Chat')
+        .where(firebase.firestore.FieldPath.documentId(), '==', email)
+        .get()
+    ).docs[0].data();
+  } catch (error) {
+    console.log('Get Messages Error', error);
   }
 };

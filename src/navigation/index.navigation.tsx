@@ -1,12 +1,9 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useEffect} from 'react';
 import {View} from 'react-native';
 import {Button, MD2Colors, Text, IconButton} from 'react-native-paper';
-
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
-
 import TabsNavigation from './tabs/index.navigation';
-
 import {
   SignInScreen,
   SignUpScreen,
@@ -15,20 +12,21 @@ import {
   OrderHistoryScreen,
   OrderDetailsScreen,
   CheckoutScreen,
+  NotificationsScreen,
+  DeliveriesScreen,
+  ChatScreen,
 } from '../screens/index.screens';
-
 import {
   useAppSelector,
   useAppDispatch,
 } from '../services/api-services/redux/hooks';
-
+import firestore, {firebase} from '@react-native-firebase/firestore';
 import LoadingIndicator from '../components/loading-indicator/index.component';
-
 import {UserContext} from '../features/context';
-
 import {useAuthStateChanged} from '../hooks/useAuthStateChanged';
-
 import {styles} from './styles.navigation';
+import {userTypes} from '../constants/user-types';
+import {orderStatuses} from '../constants/order-statuses';
 
 const Stack = createNativeStackNavigator();
 
@@ -41,6 +39,95 @@ const Navigation = () => {
   const navigation = useNavigation<any>();
 
   useAuthStateChanged();
+
+  useEffect(() => {
+    let subscriber: any;
+
+    if (user && user?.userType === userTypes.customer) {
+      subscriber = firestore()
+        .collection('reddlamar1@gmail.com-Notifications')
+        .where('read', '==', false)
+        .onSnapshot(documentSnapshot => {
+          console.log(
+            'Unread Notifications',
+            documentSnapshot.docs.map(d => d.data()),
+          );
+          dispatch({
+            type: 'getUnreadNotificationsDocumentSnapshot',
+            payload: documentSnapshot.docs.map(d => d.data()),
+          });
+        });
+    }
+
+    // Stop listening for updates when no longer required
+    return () => {
+      if (subscriber) {
+        subscriber();
+      }
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  useEffect(() => {
+    let subscriber: any;
+    if (user) {
+      subscriber = firestore()
+        .collection('Chat')
+        .where(
+          firebase.firestore.FieldPath.documentId(),
+          '==',
+          'reddlamar1@gmail.com',
+        )
+        .onSnapshot(documentSnapshot => {
+          console.log(
+            'Chat',
+            documentSnapshot.docs.map(d => d.data()),
+          );
+          dispatch({
+            type: 'getMessages',
+            payload: {email: 'reddlamar1@gmail.com'},
+          });
+        });
+    }
+
+    // Stop listening for updates when no longer required
+    return () => {
+      if (subscriber) {
+        subscriber();
+      }
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
+  useEffect(() => {
+    let subscriber: any;
+    if (user) {
+      subscriber = firestore()
+        .collection('Orders')
+        .where('status', '==', orderStatuses.inProgress)
+        .onSnapshot(documentSnapshot => {
+          console.log(
+            'Orders',
+            documentSnapshot.docs.map(d => d.data()),
+          );
+          dispatch({
+            type: 'getInProgressOrders',
+            payload: {status: orderStatuses.inProgress},
+          });
+        });
+    }
+
+    // Stop listening for updates when no longer required
+    return () => {
+      if (subscriber) {
+        subscriber();
+      }
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   const renderSignOutButton = () => (
     <IconButton
@@ -127,19 +214,37 @@ const Navigation = () => {
             name={screenNames.checkout}
             component={CheckoutScreen}
           />
+          <Stack.Screen
+            name={screenNames.notifications}
+            component={NotificationsScreen}
+          />
         </Stack.Group>
       );
     }
 
     if (user?.userType === 'employee') {
       return (
-        <Stack.Group screenOptions={{headerBackTitle: 'Back'}}>
+        <Stack.Group
+          screenOptions={{
+            headerBackTitle: 'Back',
+            headerBackTitleStyle: {fontSize: 21},
+            headerTintColor: MD2Colors.blue700,
+            headerTitleStyle: {color: MD2Colors.blue700, fontSize: 21},
+          }}>
           <Stack.Screen
-            name="Root"
+            name="Tabs"
             component={TabsNavigation}
             options={{headerShown: false}}
           />
-          <Stack.Screen name={'Order Details'} component={OrderDetailsScreen} />
+          <Stack.Screen
+            name={screenNames.orderDetails}
+            component={OrderDetailsScreen}
+          />
+          <Stack.Screen
+            name={screenNames.deliveries}
+            component={DeliveriesScreen}
+          />
+          <Stack.Screen name={screenNames.chat} component={ChatScreen} />
         </Stack.Group>
       );
     }

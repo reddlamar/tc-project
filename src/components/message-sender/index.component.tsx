@@ -1,12 +1,13 @@
 // import {View, Text} from 'react-native';
-import React, {useState, useContext} from 'react';
+import React, {useState} from 'react';
 import {TextInput, IconButton, MD2Colors} from 'react-native-paper';
-import {UserContext} from '../../features/context';
 
 import {styles} from './styles.component';
+import {userTypes} from '../../constants/user-types';
+import {useAppSelector} from '../../services/api-services/redux/hooks';
 
-const MessageSender = ({setChat}: any) => {
-  const {user} = useContext<any>(UserContext);
+const MessageSender = ({sendMessage, customerEmail = ''}: any) => {
+  const {user} = useAppSelector((state: any) => state.userReducer);
   const [message, setMessage] = useState('');
 
   return (
@@ -16,24 +17,36 @@ const MessageSender = ({setChat}: any) => {
         style={styles.text}
         value={message}
         onChangeText={setMessage}
-        textColor={MD2Colors.red900}
-        placeholderTextColor={MD2Colors.red900}
+        textColor={
+          user?.userType === userTypes.customer
+            ? MD2Colors.red700
+            : MD2Colors.blue700
+        }
+        placeholderTextColor={
+          user?.userType === userTypes.customer
+            ? MD2Colors.red700
+            : MD2Colors.blue700
+        }
       />
       <IconButton
         style={styles.button}
         icon="send"
         containerColor={MD2Colors.grey100}
-        iconColor={MD2Colors.red900}
-        rippleColor={MD2Colors.green500}
+        iconColor={
+          user?.userType === userTypes.customer
+            ? MD2Colors.red700
+            : MD2Colors.blue700
+        }
+        rippleColor={MD2Colors.black}
         mode="contained-tonal"
         onPress={() => {
           const newChat = {
             sender: user?.email,
             message: message,
-            time: new Date(Date.now().toString()).toLocaleDateString(),
           };
+          const email = customerEmail ? customerEmail : user?.email;
           setMessage('');
-          setChat((chat: any) => [...chat, newChat]);
+          sendMessage(newChat, email);
         }}
       />
     </>
