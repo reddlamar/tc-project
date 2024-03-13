@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
   },
   scrollView: {rowGap: 9},
   topContainer: {
-    flex: 1,
+    height: 120,
     width: '100%',
     borderWidth: 1,
     borderColor: MD2Colors.white,
@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
   },
   topContainerText: {fontSize: 30},
   bottomContainer: {
-    flex: 4,
+    height: 300,
     width: '100%',
     padding: 9,
     color: MD2Colors.white,
@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     fontSize: 21,
     fontWeight: 'bold',
     color: MD2Colors.white,
-    textAlign: 'center',
+    textAlign: 'justify',
   },
   flatListOrder: {rowGap: 9},
   textTotal: {
@@ -71,4 +71,5 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     columnGap: 6,
   },
+  image: {objectFit: 'contain', width: 100, height: 100},
 });

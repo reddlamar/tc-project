@@ -27,7 +27,7 @@
 		120381752B8FC217008EB774 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 120381622B8FC217008EB774 /* SimpleLineIcons.ttf */; };
 		120381762B8FC217008EB774 /* FontAwesome6_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 120381632B8FC217008EB774 /* FontAwesome6_Brands.ttf */; };
 		120381772B8FC217008EB774 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 120381642B8FC217008EB774 /* MaterialIcons.ttf */; };
-		121629F02B8FD767002C5556 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 121629EF2B8FD767002C5556 /* GoogleService-Info.plist */; };
+		12913E0B2BA1253400773D5F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 12913E0A2BA1253400773D5F /* GoogleService-Info.plist */; };
 		129AE8B42B9F67A5009B7542 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 129AE8B32B9F67A5009B7542 /* LaunchScreen.storyboard */; };
 		129AE8B52B9F67A5009B7542 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 129AE8B32B9F67A5009B7542 /* LaunchScreen.storyboard */; };
 		12AAC62B6289BEA5F0250B4C /* Pods_Project_ProjectTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5E4A1F78369EE305A1B6292 /* Pods_Project_ProjectTests.framework */; };
@@ -70,8 +70,9 @@
 		120381622B8FC217008EB774 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = SimpleLineIcons.ttf; sourceTree = "<group>"; };
 		120381632B8FC217008EB774 /* FontAwesome6_Brands.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome6_Brands.ttf; sourceTree = "<group>"; };
 		120381642B8FC217008EB774 /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
-		121629EF2B8FD767002C5556 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		12913E0A2BA1253400773D5F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		129AE8B32B9F67A5009B7542 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Project/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		12DDB90E2BA12E3500ED6FFE /* Project.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Project.entitlements; path = Project/Project.entitlements; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Project.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Project/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = Project/AppDelegate.mm; sourceTree = "<group>"; };
@@ -154,6 +155,8 @@
 		13B07FAE1A68108700A75B9A /* Project */ = {
 			isa = PBXGroup;
 			children = (
+				12DDB90E2BA12E3500ED6FFE /* Project.entitlements */,
+				12913E0A2BA1253400773D5F /* GoogleService-Info.plist */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -184,7 +187,6 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				121629EF2B8FD767002C5556 /* GoogleService-Info.plist */,
 				120381512B8FC217008EB774 /* Fonts */,
 				13B07FAE1A68108700A75B9A /* Project */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -332,7 +334,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				1203816B2B8FC217008EB774 /* MaterialCommunityIcons.ttf in Resources */,
 				120381742B8FC217008EB774 /* FontAwesome6_Solid.ttf in Resources */,
-				121629F02B8FD767002C5556 /* GoogleService-Info.plist in Resources */,
+				12913E0B2BA1253400773D5F /* GoogleService-Info.plist in Resources */,
 				120381682B8FC217008EB774 /* FontAwesome6_Regular.ttf in Resources */,
 				120381772B8FC217008EB774 /* MaterialIcons.ttf in Resources */,
 			);
@@ -570,7 +572,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Project/Project.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BLHL442C73;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Project/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -597,7 +601,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Project/Project.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = BLHL442C73;
 				INFOPLIST_FILE = Project/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -688,10 +694,7 @@
 				);
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_CFLAGS = "$(inherited)  ";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -699,10 +702,7 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -773,10 +773,7 @@
 					"\"$(inherited)\"",
 				);
 				MTL_ENABLE_DEBUG_INFO = NO;
-				OTHER_CFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_CFLAGS = "$(inherited)  ";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DFOLLY_NO_CONFIG",
@@ -784,10 +781,7 @@
 					"-DFOLLY_USE_LIBCPP=1",
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

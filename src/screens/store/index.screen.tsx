@@ -1,31 +1,23 @@
 import {View, FlatList} from 'react-native';
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback} from 'react';
 import {Avatar, Button, Card, MD2Colors, Text} from 'react-native-paper';
-import {
-  useAppDispatch,
-  useAppSelector,
-} from '../../services/api-services/redux/hooks';
+import {useAppSelector} from '../../services/api-services/redux/hooks';
 import {screenNames} from '../index.screens';
 import {styles} from './styles.screen';
 import AddCartButton from '../../components/add-cart-button/index.component';
 import {companyNames} from '../../constants/company-names';
 
 const StoreScreen = (props: any) => {
-  const dispatch = useAppDispatch();
   const products = useAppSelector(
     (state: any) => state.productsReducer.products,
   );
 
   const {navigation} = props;
 
-  useEffect(() => {
-    dispatch({type: 'getProduct'});
-  }, [dispatch]);
-
   const leftContent = useCallback((product: any) => {
     let iconName = 'devices';
 
-    if (companyNames.indexOf(product.company.toLowerCase()) > -1) {
+    if (companyNames.indexOf(product?.company.toLowerCase()) > -1) {
       iconName = product.company.toLowerCase();
     } else {
       iconName = product.type;

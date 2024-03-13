@@ -5,12 +5,24 @@ import OrderStatusButton from '../../components/order-status-button/index.compon
 import {useAppDispatch} from '../../services/api-services/redux/hooks';
 import {orderStatuses} from '../../constants/order-statuses';
 import {firebase} from '@react-native-firebase/firestore';
+// import {sendNotification} from '../../services/api-services/fetch/cloud-messaging';
+// import messaging from '@react-native-firebase/messaging';
 import {styles} from './styles.screen';
 
 const OrderDetailsScreen = ({route}: any) => {
   const {order} = route.params;
   const dispatch = useAppDispatch();
   const [status, setStatus] = useState(order.status);
+
+  // const getDeviceToken = async () => {
+  //   try {
+  //     await messaging().registerDeviceForRemoteMessages();
+  //     const token = await messaging().getToken();
+  //     return token;
+  //   } catch (error) {
+  //     console.log('Token Error:', error);
+  //   }
+  // };
 
   const createdAtOrder = new firebase.firestore.Timestamp(
     order.createdAt.seconds,
@@ -19,21 +31,27 @@ const OrderDetailsScreen = ({route}: any) => {
     .toDate()
     .toLocaleDateString();
 
-  const startOrder = () => {
+  const startOrder = async () => {
     setStatus(orderStatuses.inProgress);
+    // const token = await getDeviceToken();
+    // await sendNotification('Your order will be there in 30 minutes', token);
     dispatch({
       type: 'updateOrder',
-      payload: {order, status: orderStatuses.inProgress},
-    });
-    dispatch({
-      type: 'sendNotification',
       payload: {
-        email: 'reddlamar1@gmail.com',
-        text: 'Your order will be there in 30 minutes',
-        createdAt: new Date(),
-        read: false,
+        order,
+        status: orderStatuses.inProgress,
+        email: 'jay@gmail.com',
       },
     });
+    // dispatch({
+    //   type: 'sendNotification',
+    //   payload: {
+    //     email: 'lamar1@gmail.com',
+    //     text: 'Your order will be there in 30 minutes',
+    //     createdAt: new Date(),
+    //     read: false,
+    //   },
+    // });
   };
 
   const rejectOrder = () => {
@@ -45,7 +63,7 @@ const OrderDetailsScreen = ({route}: any) => {
     dispatch({
       type: 'sendNotification',
       payload: {
-        email: 'reddlamar1@gmail.com',
+        email: 'lamar1@gmail.com',
         text: 'We are out of stock. We apologize for the inconvenience',
         createdAt: new Date(),
         read: false,
@@ -57,17 +75,17 @@ const OrderDetailsScreen = ({route}: any) => {
     setStatus(orderStatuses.delivered);
     dispatch({
       type: 'updateOrder',
-      payload: {order, status: orderStatuses.delivered},
+      payload: {order, status: orderStatuses.delivered, email: 'jay@gmail.com'},
     });
-    dispatch({
-      type: 'sendNotification',
-      payload: {
-        email: 'reddlamar1@gmail.com',
-        text: 'Your order was delivered',
-        createdAt: new Date(),
-        read: false,
-      },
-    });
+    // dispatch({
+    //   type: 'sendNotification',
+    //   payload: {
+    //     email: 'lamar1@gmail.com',
+    //     text: 'Your order was delivered',
+    //     createdAt: new Date(),
+    //     read: false,
+    //   },
+    // });
   };
 
   return (

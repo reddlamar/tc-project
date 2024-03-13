@@ -14,6 +14,8 @@ import CheckoutScreen from './checkout/index.screen';
 import NotificationsScreen from './notifications/index.screen';
 import DeliveriesScreen from './deliveries/index.screen';
 import EmployeeChatScreen from './employee-chat/index.screen';
+import AddReviewScreen from './add-review/index.screen';
+import CustomerReviewsScreen from './customer-reviews/index.screen';
 
 export {
   HomeScreen,
@@ -32,6 +34,8 @@ export {
   NotificationsScreen,
   DeliveriesScreen,
   EmployeeChatScreen,
+  AddReviewScreen,
+  CustomerReviewsScreen,
 };
 
 export const screenNames = {
@@ -51,4 +55,6 @@ export const screenNames = {
   notifications: 'Notifications',
   deliveries: 'Deliveries',
   employeeChat: 'Employee Chat',
+  addReview: 'Add Review',
+  customerReviews: 'Customer Reviews',
 };

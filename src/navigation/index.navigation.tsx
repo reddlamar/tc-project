@@ -1,5 +1,5 @@
 import React, {useContext, useState, useEffect} from 'react';
-import {View} from 'react-native';
+import {View, Platform} from 'react-native';
 import {Button, MD2Colors, Text, IconButton} from 'react-native-paper';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useNavigation} from '@react-navigation/native';
@@ -15,18 +15,23 @@ import {
   NotificationsScreen,
   DeliveriesScreen,
   ChatScreen,
+  AddReviewScreen,
+  CustomerReviewsScreen,
 } from '../screens/index.screens';
 import {
   useAppSelector,
   useAppDispatch,
 } from '../services/api-services/redux/hooks';
-import firestore, {firebase} from '@react-native-firebase/firestore';
+// import firestore, {firebase} from '@react-native-firebase/firestore';
+import messaging from '@react-native-firebase/messaging';
+import {PermissionsAndroid} from 'react-native';
+// import {Alert} from 'react-native';
 import LoadingIndicator from '../components/loading-indicator/index.component';
 import {UserContext} from '../features/context';
 import {useAuthStateChanged} from '../hooks/useAuthStateChanged';
 import {styles} from './styles.navigation';
-import {userTypes} from '../constants/user-types';
-import {orderStatuses} from '../constants/order-statuses';
+// import {userTypes} from '../constants/user-types';
+// import {orderStatuses} from '../constants/order-statuses';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,94 +45,138 @@ const Navigation = () => {
 
   useAuthStateChanged();
 
-  useEffect(() => {
-    let subscriber: any;
+  // useEffect(() => {
+  //   async function registerDeviceForRemoteMessages() {
+  //     await messaging().registerDeviceForRemoteMessages();
+  //     const token = await messaging().getToken();
+  //     console.log('Token', token);
+  //     dispatch({type: 'getDeviceToken', payload: token});
+  //   }
 
-    if (user && user?.userType === userTypes.customer) {
-      subscriber = firestore()
-        .collection('reddlamar1@gmail.com-Notifications')
-        .where('read', '==', false)
-        .onSnapshot(documentSnapshot => {
-          console.log(
-            'Unread Notifications',
-            documentSnapshot.docs.map(d => d.data()),
-          );
-          dispatch({
-            type: 'getUnreadNotificationsDocumentSnapshot',
-            payload: documentSnapshot.docs.map(d => d.data()),
-          });
-        });
+  //   registerDeviceForRemoteMessages();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
+  // useEffect(() => {
+  //   const unsubscribe = messaging().onMessage(async remoteMessage => {
+  //     Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+  //   });
+
+  //   return unsubscribe;
+  // }, []);
+
+  // useEffect(() => {
+  //   let subscriber: any;
+
+  //   if (user && user?.userType === userTypes.customer) {
+  //     subscriber = firestore()
+  //       .collection('lamar1@gmail.com-Notifications')
+  //       .onSnapshot(documentSnapshot => {
+  //         dispatch({
+  //           type: 'getNotificationsDocumentSnapshot',
+  //           payload: documentSnapshot.docs.map(d => d.data()),
+  //         });
+  //       });
+  //   }
+
+  //   // Stop listening for updates when no longer required
+  //   return () => {
+  //     if (subscriber) {
+  //       subscriber();
+  //     }
+  //   };
+
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [user]);
+
+  // useEffect(() => {
+  //   let subscriber: any;
+  //   if (user) {
+  //     subscriber = firestore()
+  //       .collection('Chat')
+  //       .where(
+  //         firebase.firestore.FieldPath.documentId(),
+  //         '==',
+  //         'lamar1@gmail.com',
+  //       )
+  //       .onSnapshot(documentSnapshot => {
+  //         console.log(
+  //           'Chat',
+  //           documentSnapshot.docs.map(d => d.data()),
+  //         );
+  //         dispatch({
+  //           type: 'getMessages',
+  //           payload: {email: 'lamar1@gmail.com'},
+  //         });
+  //       });
+  //   }
+
+  //   // Stop listening for updates when no longer required
+  //   return () => {
+  //     if (subscriber) {
+  //       subscriber();
+  //     }
+  //   };
+
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [user]);
+
+  useEffect(() => {
+    async function requestUserPermission() {
+      const authStatus = await messaging().requestPermission();
+      const enabled =
+        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+      if (enabled) {
+        console.log('Authorization status:', authStatus);
+      }
     }
 
-    // Stop listening for updates when no longer required
-    return () => {
-      if (subscriber) {
-        subscriber();
-      }
-    };
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+    if (Platform.OS === 'ios') {
+      requestUserPermission();
+    }
+  }, []);
 
   useEffect(() => {
-    let subscriber: any;
-    if (user) {
-      subscriber = firestore()
-        .collection('Chat')
-        .where(
-          firebase.firestore.FieldPath.documentId(),
-          '==',
-          'reddlamar1@gmail.com',
-        )
-        .onSnapshot(documentSnapshot => {
-          console.log(
-            'Chat',
-            documentSnapshot.docs.map(d => d.data()),
-          );
-          dispatch({
-            type: 'getMessages',
-            payload: {email: 'reddlamar1@gmail.com'},
-          });
-        });
+    if (Platform.OS === 'android') {
+      PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+      );
     }
-
-    // Stop listening for updates when no longer required
-    return () => {
-      if (subscriber) {
-        subscriber();
-      }
-    };
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, []);
 
   useEffect(() => {
-    let subscriber: any;
-    if (user) {
-      subscriber = firestore()
-        .collection('Orders')
-        .where('status', '==', orderStatuses.inProgress)
-        .onSnapshot(documentSnapshot => {
-          console.log(
-            'Orders',
-            documentSnapshot.docs.map(d => d.data()),
-          );
-          dispatch({
-            type: 'getInProgressOrders',
-            payload: {status: orderStatuses.inProgress},
-          });
-        });
-    }
+    dispatch({type: 'getProducts'});
+  }, [dispatch]);
 
-    // Stop listening for updates when no longer required
-    return () => {
-      if (subscriber) {
-        subscriber();
-      }
-    };
+  // useEffect(() => {
+  //   let subscriber: any;
+  //   if (user) {
+  //     subscriber = firestore()
+  //       .collection('Orders')
+  //       .where('status', '==', orderStatuses.inProgress)
+  //       .onSnapshot(documentSnapshot => {
+  //         console.log(
+  //           'Orders',
+  //           documentSnapshot.docs.map(d => d.data()),
+  //         );
+  //         dispatch({
+  //           type: 'getInProgressOrders',
+  //           payload: {status: orderStatuses.inProgress},
+  //         });
+  //       });
+  //   }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  //   // Stop listening for updates when no longer required
+  //   return () => {
+  //     if (subscriber) {
+  //       subscriber();
+  //     }
+  //   };
+
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [user]);
 
   const renderSignOutButton = () => (
     <IconButton
@@ -218,6 +267,10 @@ const Navigation = () => {
             name={screenNames.notifications}
             component={NotificationsScreen}
           />
+          <Stack.Screen
+            name={screenNames.addReview}
+            component={AddReviewScreen}
+          />
         </Stack.Group>
       );
     }
@@ -245,6 +298,10 @@ const Navigation = () => {
             component={DeliveriesScreen}
           />
           <Stack.Screen name={screenNames.chat} component={ChatScreen} />
+          <Stack.Screen
+            name={screenNames.customerReviews}
+            component={CustomerReviewsScreen}
+          />
         </Stack.Group>
       );
     }

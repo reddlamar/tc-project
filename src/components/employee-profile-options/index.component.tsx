@@ -28,6 +28,12 @@ const EmployeeProfileOptions = () => {
         Deliveries
       </Button>
       <Divider />
+      <Button
+        labelStyle={styles.container}
+        onPress={() => navigation.navigate(screenNames.customerReviews)}>
+        Customer Reviews
+      </Button>
+      <Divider />
     </View>
   );
 };

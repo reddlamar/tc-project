@@ -1,4 +1,5 @@
-import React, {useEffect} from 'react';
+import React from 'react';
+//, {useEffect}
 import {View} from 'react-native';
 import {Button, IconButton, MD2Colors, Badge} from 'react-native-paper';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -62,16 +63,20 @@ const getIconName = (routeName: string, focused: boolean) => {
   return iconName;
 };
 
-const renderHeaderRight = (dispatch: any, user: any) => (
-  <IconButton
-    icon="logout"
-    onPress={() => dispatch({type: 'logout'})}
-    size={30}
-    iconColor={
-      user?.userType === 'customer' ? MD2Colors.red700 : MD2Colors.blue700
-    }
-  />
-);
+const renderHeaderRight = (dispatch: any, user: any) => {
+  if (user) {
+    return (
+      <IconButton
+        icon="logout"
+        onPress={() => dispatch({type: 'logout'})}
+        size={30}
+        iconColor={
+          user?.userType === 'customer' ? MD2Colors.red700 : MD2Colors.blue700
+        }
+      />
+    );
+  }
+};
 
 const renderCartHeaderLeft = (dispatch: Function, user: any) => {
   return (
@@ -105,13 +110,13 @@ const TabsNavigation = () => {
   const navigation = useNavigation<any>();
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch({
-      type: 'getUnreadNotifications',
-      payload: {email: 'reddlamar1@gmail.com'},
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   dispatch({
+  //     type: 'getUnreadNotifications',
+  //     payload: {email: 'lamar1@gmail.com'},
+  //   });
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   const {user, unreadNotifications} = useAppSelector(
     (state: any) => state.userReducer,

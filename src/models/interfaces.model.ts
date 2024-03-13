@@ -2,10 +2,6 @@ import {message, order} from './types.model';
 
 export interface ordersState {
   orders: order[];
-  pendingOrders: [];
-  inProgressOrders: [];
-  cancelledOrders: [];
-  rejectedOrders: [];
   order: order;
   creatingOrders: boolean;
   gettingOrders: boolean;

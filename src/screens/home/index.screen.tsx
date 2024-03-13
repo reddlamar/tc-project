@@ -1,12 +1,12 @@
 import {View, ScrollView} from 'react-native';
 import React from 'react';
 import {Text} from 'react-native-paper';
-// import {Button} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 
 import {styles} from './styles.screen';
 import {useAppSelector} from '../../services/api-services/redux/hooks';
 import CategoryList from '../../components/category-list/index.component';
-// import {addProducts} from '../../services/api-services/firebase/firestore.service';
+import {addProducts} from '../../services/api-services/firebase/firestore.service';
 
 const HomeScreen = () => {
   const {totalPrice} = useAppSelector((state: any) => state.cartReducer);
@@ -16,7 +16,7 @@ const HomeScreen = () => {
   if (user) {
     return (
       <View style={styles.container}>
-        {/* <Button onPress={() => addProducts()}>Add Products</Button> */}
+        <Button onPress={() => addProducts()}>Add Products</Button>
         <ScrollView contentContainerStyle={styles.scrollView}>
           <View style={styles.topContainer}>
             <Text variant="titleMedium" style={styles.expenseText}>

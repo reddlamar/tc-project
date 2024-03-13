@@ -18,15 +18,16 @@ const NotificationsScreen = () => {
       notifications.forEach((n: any) => {
         dispatch({
           type: 'updateNotifications',
-          payload: {email: 'reddlamar1@gmail.com', read: true, notification: n},
+          payload: {email: 'lamar1@gmail.com', read: true, notification: n},
         });
       });
 
       dispatch({
         type: 'getNotifications',
-        payload: {email: 'reddlamar1@gmail.com'},
+        payload: {email: 'lamar1@gmail.com'},
       });
     };
+
     updateNotifications();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

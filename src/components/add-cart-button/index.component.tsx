@@ -4,9 +4,14 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '../../services/api-services/redux/hooks';
+import {useNavigation} from '@react-navigation/native';
 import {addToCart} from '../../services/api-services/redux/slices/cart.slice';
+import {View} from 'react-native';
+import {screenNames} from '../../screens/index.screens';
+import {styles} from './styles.component';
 
 const AddCartButton = ({product}: any) => {
+  const navigation = useNavigation<any>();
   const dispatch = useAppDispatch();
   const {cart} = useAppSelector((state: any) => state.cartReducer);
 
@@ -19,14 +24,25 @@ const AddCartButton = ({product}: any) => {
     cart.some((ci: any) => ci.product.id === product.id);
 
   return (
-    <Button
-      icon="cart"
-      buttonColor={MD2Colors.red700}
-      textColor={MD2Colors.white}
-      disabled={checkInCart()}
-      onPress={() => addCartItemToCart()}>
-      {checkInCart() ? 'Added To Cart' : 'Add To Cart'}
-    </Button>
+    <View style={styles.buttonContainer}>
+      {checkInCart() && (
+        <Button
+          icon="currency-usd"
+          buttonColor={MD2Colors.red700}
+          textColor={MD2Colors.white}
+          onPress={() => navigation.navigate(screenNames.checkout)}>
+          Checkout
+        </Button>
+      )}
+      <Button
+        icon="cart"
+        buttonColor={MD2Colors.red700}
+        textColor={MD2Colors.white}
+        disabled={checkInCart()}
+        onPress={() => addCartItemToCart()}>
+        {checkInCart() ? 'Added To Cart' : 'Add To Cart'}
+      </Button>
+    </View>
   );
 };
 

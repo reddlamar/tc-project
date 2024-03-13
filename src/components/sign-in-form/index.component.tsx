@@ -1,17 +1,19 @@
-import {View, Image} from 'react-native';
+import {View} from 'react-native';
+// , Image
 import React, {useEffect, useState} from 'react';
+// , {useEffect, useState}
 import {TextInput, Button, MD2Colors, Text} from 'react-native-paper';
-
 import {useNavigation} from '@react-navigation/native';
-import {useAppDispatch} from '../../services/api-services/redux/hooks';
-
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../services/api-services/redux/hooks';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
-
 import {styles} from './styles.component';
 import {screenNames} from '../../screens/index.screens';
-
-import {getFile} from '../../services/api-services/firebase/storage.service';
+import CustomModal from '../modal/index.component';
+// import {getFile} from '../../services/api-services/firebase/storage.service';
 
 const SignInSchema = Yup.object().shape({
   email: Yup.string().email('Invalid Email!').required('Required'),
@@ -23,10 +25,13 @@ const SignInSchema = Yup.object().shape({
 
 const SignInForm = () => {
   const navigation = useNavigation<any>();
+  const {errorMessage} = useAppSelector((state: any) => state.userReducer);
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const formik = useFormik({
     initialValues: {
-      email: 'reddlamar1@gmail.com',
+      email: 'lamar@gmail.com',
       password: '123456',
       isEmployeeSignedIn: false,
     },
@@ -34,32 +39,38 @@ const SignInForm = () => {
     onSubmit: values => console.log(values),
   });
 
-  const [url, setUrl] = useState('');
+  // const [url, setUrl] = useState('');
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const getURL = async () => {
-      const filePath: any = await getFile('/LR.png');
-      setUrl(filePath);
-    };
-    getURL();
-  }, []);
-
-  const renderLogo = () => {
-    if (url) {
-      return (
-        <View style={styles.imageContainer}>
-          <Image source={{uri: url}} style={styles.image} />
-        </View>
-      );
+    if (errorMessage) {
+      setModalVisible(true);
     }
-  };
+  }, [errorMessage]);
+
+  // useEffect(() => {
+  //   const getURL = async () => {
+  //     const filePath: any = await getFile('/LR.png');
+  //     setUrl(filePath);
+  //   };
+  //   getURL();
+  // }, []);
+
+  // const renderLogo = () => {
+  //   if (url) {
+  //     return (
+  //       <View style={styles.imageContainer}>
+  //         <Image source={{uri: url}} style={styles.image} />
+  //       </View>
+  //     );
+  //   }
+  // };
 
   return (
     <>
       <View style={styles.container}>
-        <View style={styles.content}>{renderLogo()}</View>
+        {/* <View style={styles.content}>{renderLogo()}</View> */}
         <TextInput
           label="Email"
           onChangeText={formik.handleChange('email')}
@@ -106,6 +117,11 @@ const SignInForm = () => {
           </Button>
         </View>
       </View>
+      <CustomModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}>
+        <Text style={styles.modalText}>{errorMessage}</Text>
+      </CustomModal>
     </>
   );
 };

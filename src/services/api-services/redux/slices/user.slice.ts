@@ -4,8 +4,8 @@ export const userSlice = createSlice({
   name: 'userReducer',
   initialState: {
     user: null,
+    deviceToken: '',
     notifications: [],
-    unreadNotifications: [],
     isSigningIn: false,
     isSigningOut: false,
     failure: false,
@@ -25,14 +25,11 @@ export const userSlice = createSlice({
     getNotifications: (state, action) => {
       state.notifications = action.payload;
     },
-    getUnreadNotifications: (state, action) => {
-      state.unreadNotifications = action.payload;
+    getDeviceToken: (state, action) => {
+      state.deviceToken = action.payload;
     },
     updateNotifications: (state, action) => {
       state.notifications = action.payload;
-    },
-    updateUnreadNotifications: (state, action) => {
-      state.unreadNotifications = action.payload;
     },
     failure: (state, action) => {
       state.isSigningIn = false;
@@ -48,9 +45,8 @@ export const {
   logout,
   failure,
   getNotifications,
-  getUnreadNotifications,
   updateNotifications,
-  updateUnreadNotifications,
+  getDeviceToken,
 } = userSlice.actions;
 
 export default userSlice.reducer;

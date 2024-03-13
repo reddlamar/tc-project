@@ -3,10 +3,6 @@ import {ordersState} from '../../../../models/interfaces.model';
 
 const initialState: ordersState = {
   orders: [],
-  pendingOrders: [],
-  inProgressOrders: [],
-  cancelledOrders: [],
-  rejectedOrders: [],
   order: {
     cart: [],
     totalPrice: 0,
@@ -51,18 +47,6 @@ export const cartSlice = createSlice({
     getOrders: (state, action) => {
       state.orders = action.payload;
     },
-    getPendingOrders: (state, action) => {
-      state.pendingOrders = action.payload;
-    },
-    getInProgressOrders: (state, action) => {
-      state.inProgressOrders = action.payload;
-    },
-    getCancelledOrders: (state, action) => {
-      state.cancelledOrders = action.payload;
-    },
-    getRejectedOrders: (state, action) => {
-      state.rejectedOrders = action.payload;
-    },
     updateOrderStatus: (state, action) => {
       state.updatingOrders = false;
       state.order.status = action.payload.status;
@@ -76,15 +60,7 @@ export const cartSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {
-  createOrder,
-  updateOrderStatus,
-  getOrders,
-  getPendingOrders,
-  getInProgressOrders,
-  getCancelledOrders,
-  getRejectedOrders,
-  failure,
-} = cartSlice.actions;
+export const {createOrder, updateOrderStatus, getOrders, failure} =
+  cartSlice.actions;
 
 export default cartSlice.reducer;

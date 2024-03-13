@@ -1,7 +1,7 @@
 import {ScrollView} from 'react-native';
 import React, {useEffect, useState} from 'react';
 
-import {getUser} from '../../services/api-services/firebase/firestore.service';
+import {getCustomer} from '../../services/api-services/firebase/firestore.service';
 import {getFile} from '../../services/api-services/firebase/storage.service';
 
 import Profile from '../../components/profile/index.component';
@@ -16,7 +16,7 @@ const ProfileScreen = () => {
 
   useEffect(() => {
     const getUserData = async (email: string): Promise<void> => {
-      const data = await getUser(email);
+      const data = await getCustomer(email);
       setProfile({...data});
     };
 
@@ -28,7 +28,7 @@ const ProfileScreen = () => {
   useEffect(() => {
     const getImage = async () => {
       if (profile) {
-        const uri = await getFile(`images/LR.png`);
+        const uri = await getFile('LR.png');
         setImageUri(uri);
       }
     };

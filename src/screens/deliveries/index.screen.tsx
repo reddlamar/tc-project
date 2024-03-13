@@ -1,18 +1,31 @@
 import {View, Text, FlatList, ScrollView} from 'react-native';
-import React from 'react';
-import {useAppSelector} from '../../services/api-services/redux/hooks';
+import React, {useEffect, useState} from 'react';
 import {firebase} from '@react-native-firebase/firestore';
 import {styles} from './styles.screen';
+import {getOrderCollectionByStatus} from '../../services/api-services/firebase/firestore.service';
+import {orderStatuses} from '../../constants/order-statuses';
 
 const DeliveriesScreen = () => {
-  const {inProgressOrders} = useAppSelector((state: any) => state.orderReducer);
+  const [inProgressOrders, setInProgressOrders] = useState([]);
+  useEffect(() => {
+    const getInProgressOrders = async () => {
+      const orders: any = await getOrderCollectionByStatus(
+        orderStatuses.inProgress,
+      );
+      console.log('Orders', orders);
+      if (orders) {
+        setInProgressOrders(orders);
+      }
+    };
+    getInProgressOrders();
+  }, []);
 
   if (inProgressOrders?.length > 0) {
     return (
       <View>
         <FlatList
           data={inProgressOrders}
-          renderItem={({item}) => {
+          renderItem={({item}: any) => {
             const createdAt = new firebase.firestore.Timestamp(
               item.createdAt.seconds,
               item.createdAt.nanoseconds,

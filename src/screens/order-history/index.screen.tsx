@@ -1,13 +1,17 @@
 import {FlatList, View, ScrollView} from 'react-native';
 import React from 'react';
 import {useAppSelector} from '../../services/api-services/redux/hooks';
-import {Text} from 'react-native-paper';
+import {Button, MD2Colors, Text} from 'react-native-paper';
 import {firebase} from '@react-native-firebase/firestore';
 import Empty from '../../components/empty/index.component';
 import {styles} from './styles.screen';
+import {orderStatuses} from '../../constants/order-statuses';
+import {useNavigation} from '@react-navigation/native';
+import {screenNames} from '../index.screens';
 
 const OrderHistoryScreen = () => {
   const orders = useAppSelector((state: any) => state.orderReducer.orders);
+  const navigation = useNavigation<any>();
 
   if (orders.length === 0) {
     return <Empty text="You do not have any order history" />;
@@ -27,6 +31,7 @@ const OrderHistoryScreen = () => {
           )
             .toDate()
             .toLocaleDateString();
+          console.log('Order History Delivery Email', item.deliveryClerkEmail);
           return (
             <View style={styles.itemContainer}>
               {item.cart.map((ci: any) => (
@@ -43,6 +48,18 @@ const OrderHistoryScreen = () => {
               <Text style={styles.totalPriceText}>
                 Total Price: {item.totalPrice}
               </Text>
+              {item.status === orderStatuses.delivered && (
+                <Button
+                  onPress={() =>
+                    navigation.navigate(screenNames.addReview, {
+                      deliveryClerkEmail: item.deliveryClerkEmail,
+                    })
+                  }
+                  textColor={MD2Colors.white}
+                  buttonColor={MD2Colors.black}>
+                  Add A Review
+                </Button>
+              )}
             </View>
           );
         }}

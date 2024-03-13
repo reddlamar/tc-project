@@ -98,10 +98,11 @@ const CheckoutScreen = ({navigation}: any) => {
                   status: orderStatuses.pending,
                   deliveryDate: new Date(),
                   estimatedTime: Date.now() + 1800000,
-                  deliveryBoyTrackingLocation: {
-                    longitude: -84.386205,
-                    latitude: 33.7683818,
+                  deliveryClerkTrackingLocation: {
+                    latitude: 32.715736,
+                    longitude: -117.161087,
                   },
+                  deliveryClerkEmail: '',
                 },
               });
 

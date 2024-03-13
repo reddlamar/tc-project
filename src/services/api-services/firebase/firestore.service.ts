@@ -2,25 +2,80 @@ import firestore, {firebase} from '@react-native-firebase/firestore';
 import products from '../../../data/products.json';
 import {message} from '../../../models/types.model';
 
-export const addUser = async (
+export const addCustomer = async (
   firstName: string,
   lastName: string,
   email: string,
   image: string,
   address: object,
   phone: string,
+  hash: string,
 ) => {
   try {
-    await firestore().collection('Users').add({
+    await firestore().collection('Customers').add({
       firstName,
       lastName,
       email,
       phone,
       image,
       address,
+      userType: 'customer',
+      hash,
+      deviceToken:
+        'ePfWOShl-UJirUx_aEYMMj:APA91bEacMUROx5TlbtemUaeD_BpgcRj_Hsx9cn3G8guCBz3Tv7-AifmSxEBIlW3GNmZpQBSCcBcFL56qoraHSMOAjrPvRm5J_AdAHJsZNUJpSdIEQh9C-OTF7PYpcFhFLrXix9L2omF',
     });
   } catch (error) {
     console.log('Add User Error:', error);
+  }
+};
+
+export const getCustomer = async (email: string) => {
+  try {
+    const userData = await firestore()
+      .collection('Customers')
+      .where('email', '==', email)
+      .get();
+
+    if (userData.docs.length > 0) {
+      return userData.docs[0].data();
+    }
+
+    const employeeData = await firestore()
+      .collection('Employees')
+      .where('email', '==', email)
+      .get();
+
+    if (employeeData) {
+      return employeeData.docs[0].data();
+    }
+  } catch (error) {
+    console.log('Get Customer Error:', error);
+  }
+};
+
+export const addCustomerReview = async (deliveryClerk: any, review: any) => {
+  try {
+    await firestore()
+      .collection('Employees')
+      .doc(deliveryClerk.id)
+      .set({...deliveryClerk, ['reviews']: [review, ...deliveryClerk.reviews]});
+  } catch (error) {
+    console.log('Add Review Error', error);
+  }
+};
+
+export const getCustomerReviewCollection = async (email: string) => {
+  try {
+    const reviews = await firestore()
+      .collection('Employees')
+      .where('email', '==', email)
+      .get();
+    if (reviews) {
+      return reviews.docs[0].data().reviews;
+    }
+    return null;
+  } catch (error) {
+    console.log('Error Get Customer Review:', error);
   }
 };
 
@@ -51,27 +106,11 @@ export const getCustomerNotifications = async (customerEmail: string) => {
       ...n.data(),
     }));
   } catch (error) {
-    console.log('Get Notification Error:', error);
+    console.log('Get Notifications Error:', error);
   }
 };
 
-export const getCustomerUnreadNotifications = async (customerEmail: string) => {
-  try {
-    return (
-      await firestore()
-        .collection(`${customerEmail}-Notifications`)
-        .where('read', '==', false)
-        .get()
-    ).docs.map(n => ({
-      id: n.id,
-      ...n.data(),
-    }));
-  } catch (error) {
-    console.log('Get Unread Notification Error:', error);
-  }
-};
-
-export const updateNotificationReadStatus = async (
+export const updateNotificationReadState = async (
   customerEmail: string,
   read: string,
   notification: any,
@@ -82,31 +121,7 @@ export const updateNotificationReadStatus = async (
       .doc(notification.id)
       .set({...notification, ['read']: read});
   } catch (error) {
-    console.log('Get User Error:', error);
-  }
-};
-
-export const getUser = async (email: string) => {
-  try {
-    const userData = await firestore()
-      .collection('Users')
-      .where('email', '==', email)
-      .get();
-
-    if (userData.docs.length > 0) {
-      return userData.docs[0].data();
-    }
-
-    const employeeData = await firestore()
-      .collection('Employees')
-      .where('email', '==', email)
-      .get();
-
-    if (employeeData) {
-      return employeeData.docs[0].data();
-    }
-  } catch (error) {
-    console.log('Get User Error:', error);
+    console.log('Update Notification Read State Error:', error);
   }
 };
 
@@ -118,19 +133,40 @@ export const addEmployee = async (
   driverLicense: string,
   email: string,
   employeeType: string,
+  hash: string,
 ) => {
   try {
-    await firestore().collection('Employees').add({
-      firstName,
-      lastName,
-      email,
-      phone,
-      driverLicense,
-      image,
-      employeeType,
-    });
+    await firestore()
+      .collection('Employees')
+      .add({
+        firstName,
+        lastName,
+        email,
+        phone,
+        driverLicense,
+        image,
+        employeeType,
+        trackLocation: [{latitude: 32.715736, longitude: -117.161087}],
+        hash,
+        userType: 'employee',
+      });
   } catch (error) {
     console.log('Add Employee Error:', error);
+  }
+};
+
+export const getDeliveryClerkByEmail = async (email: string) => {
+  try {
+    const deliveryClerk = await firestore()
+      .collection('Employees')
+      .where('email', '==', email)
+      .get();
+    if (deliveryClerk) {
+      return {id: deliveryClerk.docs[0].id, ...deliveryClerk.docs[0].data()};
+    }
+    return null;
+  } catch (error) {
+    console.log('Error Get Deliver Clerk Email:', error);
   }
 };
 
@@ -147,13 +183,13 @@ export const addProducts = () => {
 export const getProductCollection = async () => {
   try {
     const productData = await firestore().collection('Products').get();
-    return productData.docs;
+    return productData.docs.map(p => ({id: p.id, ...p.data()}));
   } catch (error) {
-    console.log('Get User Error:', error);
+    console.log('Get Product Collection Error:', error);
   }
 };
 
-export const getProductsDataByCategory = async (category: string) => {
+export const getProductCollectionByCategory = async (category: string) => {
   try {
     const productData = await firestore()
       .collection('Products')
@@ -165,7 +201,7 @@ export const getProductsDataByCategory = async (category: string) => {
       return {id: p.id, ...data};
     });
   } catch (error) {
-    console.log('Get User Error:', error);
+    console.log('Get Products By Category Error:', error);
   }
 };
 
@@ -192,7 +228,7 @@ export const updateProductQuantity = async (
       .doc(id)
       .set({...product, ['quantity']: quantity});
   } catch (error) {
-    console.log('Get User Error:', error);
+    console.log('Update Product Quantity Error:', error);
   }
 };
 
@@ -208,7 +244,7 @@ export const getOrderHistoryCollection = async (email: string) => {
       return {id: o.id, ...data};
     });
   } catch (error) {
-    console.log('Get User Error:', error);
+    console.log('Get Order History Collection Error:', error);
   }
 };
 
@@ -223,7 +259,7 @@ export const getOrderCollection = async () => {
       return {id: o.id, ...data};
     });
   } catch (error) {
-    console.log('Get User Error:', error);
+    console.log('Get getOrder Collection Error:', error);
   }
 };
 
@@ -235,23 +271,32 @@ export const getOrderCollectionByStatus = async (status: string) => {
       .where('status', '==', status)
       .get();
 
-    return orders.docs.map(o => {
+    return orders?.docs?.map(o => {
       const data = o.data();
       return {id: o.id, ...data};
     });
   } catch (error) {
-    console.log('Get User Error:', error);
+    console.log('Get Order Collection By Status Error:', error);
   }
 };
 
-export const updateOrderStatus = async (order: any, status: string) => {
+export const updateOrder = async (
+  order: any,
+  status: string,
+  email: string,
+) => {
   try {
     await firestore()
       .collection('Orders')
       .doc(order.id)
-      .set({...order, ['status']: status, ['updatedAt']: new Date()});
+      .set({
+        ...order,
+        ['status']: status,
+        ['updatedAt']: new Date(),
+        ['deliveryClerkEmail']: email,
+      });
   } catch (error) {
-    console.log('Get User Error:', error);
+    console.log('Update Order Status Error:', error);
   }
 };
 
@@ -286,7 +331,7 @@ export const getMessageCollection = async (email: string) => {
         .collection('Chat')
         .where(firebase.firestore.FieldPath.documentId(), '==', email)
         .get()
-    ).docs[0].data();
+    ).docs[0]?.data();
   } catch (error) {
     console.log('Get Messages Error', error);
   }

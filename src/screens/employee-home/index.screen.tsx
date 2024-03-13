@@ -1,4 +1,4 @@
-import {View, FlatList} from 'react-native';
+import {View, FlatList, Image} from 'react-native';
 import React, {useEffect} from 'react';
 import {Text, Button} from 'react-native-paper';
 import {useAppSelector} from '../../services/api-services/redux/hooks';
@@ -73,6 +73,10 @@ const EmployeeHomeScreen = ({navigation}: any) => {
             }}
           />
         </View>
+        <Image
+          source={require('../../../assets/LR.png')}
+          style={styles.image}
+        />
       </LinearGradient>
     );
   }

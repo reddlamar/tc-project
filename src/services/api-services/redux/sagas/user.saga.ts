@@ -4,21 +4,23 @@ import {
   logout,
   failure,
   getNotifications,
-  getUnreadNotifications,
+  getDeviceToken,
 } from '../slices/user.slice';
 import {signInWithEmailPassword, signOut} from '../../firebase/auth.service';
 import {
-  getUser,
+  getCustomer,
   sendCustomerNotification,
   getCustomerNotifications,
-  getCustomerUnreadNotifications,
-  updateNotificationReadStatus,
+  updateNotificationReadState,
 } from '../../firebase/firestore.service';
 
 async function signInUser(email: string, password: string) {
   const auth = await signInWithEmailPassword(email, password);
-  const extraData = await getUser(email);
-  return {id: auth?.user.uid, ...extraData};
+
+  if (auth) {
+    const extraData = await getCustomer(email);
+    return {id: auth?.user.uid, ...extraData};
+  }
 }
 
 function* watchSignIn(): Generator<any> {
@@ -78,25 +80,12 @@ function* watchGetNotifications(): Generator<any> {
   }
 }
 
-function* watchGetUnreadNotifications(): Generator<any> {
+function* watchGetNotificationsDocumentSnapshot(): Generator<any> {
   while (true) {
-    const {payload}: any = yield take('getUnreadNotifications');
+    const {payload}: any = yield take('getNotificationsDocumentSnapshot');
 
     try {
-      const data = yield call(getCustomerUnreadNotifications, payload.email);
-      yield put(getUnreadNotifications(data));
-    } catch (ex) {
-      yield put(failure(ex));
-    }
-  }
-}
-
-function* watchGetUnreadNotificationsDocumentSnapshot(): Generator<any> {
-  while (true) {
-    const {payload}: any = yield take('getUnreadNotificationsDocumentSnapshot');
-
-    try {
-      yield put(getUnreadNotifications(payload));
+      yield put(getNotifications(payload));
     } catch (ex) {
       yield put(failure(ex));
     }
@@ -109,11 +98,23 @@ function* watchUpdateNotification(action: any): Generator<any> {
 
     try {
       yield call(
-        updateNotificationReadStatus,
+        updateNotificationReadState,
         payload.email,
         payload.read,
         payload.notification,
       );
+    } catch (ex) {
+      yield put(failure(ex));
+    }
+  }
+}
+
+function* watchGetDeviceToken(): Generator<any> {
+  while (true) {
+    const {payload}: any = yield take('getDeviceToken');
+
+    try {
+      yield put(getDeviceToken(payload));
     } catch (ex) {
       yield put(failure(ex));
     }
@@ -125,7 +126,7 @@ export default function* root() {
   yield fork(watchSignOut);
   yield fork(watchSendNotification);
   yield fork(watchGetNotifications);
-  yield fork(watchGetUnreadNotifications);
-  yield fork(watchGetUnreadNotificationsDocumentSnapshot);
+  yield fork(watchGetNotificationsDocumentSnapshot);
+  yield fork(watchGetDeviceToken);
   yield takeEvery('updateNotifications', watchUpdateNotification);
 }

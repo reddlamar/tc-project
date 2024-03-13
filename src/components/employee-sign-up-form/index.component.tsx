@@ -1,14 +1,16 @@
 import React from 'react';
 import {Text, MD2Colors, RadioButton, TextInput} from 'react-native-paper';
-
+import {useNavigation} from '@react-navigation/native';
+import {SHA256} from 'crypto-js';
 import SignUpButtons from '../sign-up-buttons/index.component';
-
 import {addEmployee} from '../../services/api-services/firebase/firestore.service';
 import {signUp} from '../../services/api-services/firebase/auth.service';
-
 import {styles} from './styles.component';
+import {screenNames} from '../../screens/index.screens';
 
 const EmployeeSignUpForm = ({form}: any) => {
+  const navigation = useNavigation<any>();
+
   const onSignUp = () => {
     const {
       firstName,
@@ -20,7 +22,11 @@ const EmployeeSignUpForm = ({form}: any) => {
       driverLicense,
       password,
     } = form.values;
+
+    const hash = SHA256(password).toString();
+
     signUp(email, password);
+
     addEmployee(
       firstName,
       lastName,
@@ -29,7 +35,21 @@ const EmployeeSignUpForm = ({form}: any) => {
       driverLicense,
       email,
       employeeType,
+      hash,
     );
+
+    clearFields();
+
+    navigation.navigate(screenNames.signIn);
+  };
+
+  const clearFields = () => {
+    form.values.fistName = '';
+    form.values.lastName = '';
+    form.values.email = '';
+    form.values.phone = '';
+    form.values.image = '';
+    form.values.password = '';
   };
 
   return (
